@@ -225,11 +225,11 @@ def main():
     log.setLevel(logging.DEBUG)
 
     # Load SPEAD configuration from JSON file.
-    with open(sys.argv[-2]) as f:
+    with open(sys.argv[-3]) as f:
         spead_config = json.load(f)
 
     # Load the OSKAR settings INI file for the application.
-    settings = oskar.SettingsTree('oskar_sim_interferometer', sys.argv[-1])
+    settings = oskar.SettingsTree('oskar_sim_interferometer', sys.argv[-2])
 
     # Set up the SPEAD sender and run it (see method, above).
     sender = SpeadSender(log, spead_config, oskar_settings=settings)

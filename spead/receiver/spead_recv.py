@@ -108,10 +108,10 @@ def main():
     log.setLevel(logging.DEBUG)
 
     # Get socket port number.
-    port = int(sys.argv[-2])
+    port = int(sys.argv[-3])
 
     # Append the port number to the output file root path.
-    file_name = sys.argv[-1] + "_" + str(port) + ".ms"
+    file_name = sys.argv[-2] + "_" + str(port) + ".ms"
 
     # Set up the SPEAD receiver and run it (see method, above).
     receiver = SpeadReceiver(log, port, file_name)
