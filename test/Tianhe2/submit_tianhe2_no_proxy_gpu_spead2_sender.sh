@@ -1,9 +1,6 @@
 #!/bin/bash
 
-
-DFMS_MON_HOST="sdp-dfms.ddns.net"
-DFMS_MON_PORT="8098"
-APP_ROOT="/BIGDATA/ac_shao_tan_1/OSKAR/daliuge-master/dfms/deploy/pawsey"
+APP_ROOT="/BIGDATA/ac_shao_tan_1/OSKAR/IDOS/test/Tianhe2"
 SID=$(date +"spead2_sender_N"$1_"%Y-%m-%dT%H-%M-%S")
 LOG_DIR=$APP_ROOT"/logs/"$SID
 mkdir -p $LOG_DIR # to remove potential directory creation conflicts later
