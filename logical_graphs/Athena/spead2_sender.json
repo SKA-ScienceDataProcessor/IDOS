@@ -1,0 +1,10 @@
+{ "class": "go.GraphLinksModel",
+  "nodeDataArray": [ 
+{"category":"BashShellApp", "text":"Sender", "execution_time":5, "num_cpus":1, "group_start":0, "Arg01":"/group/pawsey0245/blao/pyml/bin/python /home/blao/OSKAR/IDOS/spead/sender/spead_send.py %i[-6] %i[-3]", "Arg02":"", "Arg03":"", "Arg04":"", "Arg05":"", "Arg06":"", "Arg07":"", "Arg08":"", "Arg09":"", "Arg10":"", "key":-4, "loc":"-431.5833282470703 -537.6666717529297"},
+{"category":"file", "text":"Spead send json file", "data_volume":5, "group_end":0, "check_filepath_exists":"1", "filepath":"/home/blao/OSKAR/IDOS/spead/sender/spead_send.json", "dirname":"", "key":-6, "loc":"-621.5833282470703 -550.1666717529297"},
+{"category":"file", "text":"OSKAR simulation interometer ini file", "data_volume":5, "group_end":0, "check_filepath_exists":"1", "filepath":"/home/blao/OSKAR/IDOS/spead/sender/oskar_sim_interferometer.ini", "dirname":"", "key":-3, "loc":"-431.5833282470703 -716.1666717529297"}
+ ],
+  "linkDataArray": [ 
+{"from":-3, "to":-4, "points":[-431.58332824706986,-676.3333384195964,-431.58332824706986,-666.3333384195964,-431.58332824706986,-616.53071696084,-431.5833282470703,-616.53071696084,-431.5833282470703,-566.7280955020836,-431.5833282470703,-556.7280955020836]},
+{"from":-6, "to":-4, "points":[-542.5833282470697,-550.1666717529296,-532.5833282470697,-550.1666717529296,-504.46404012164703,-550.1666717529296,-504.46404012164703,-537.6666717529297,-476.34475199622426,-537.6666717529297,-466.34475199622426,-537.6666717529297]}
+ ]}
