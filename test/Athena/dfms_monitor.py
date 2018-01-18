@@ -21,14 +21,15 @@
 #    MA 02111-1307  USA
 #
 """
-DFMS Monitor runs outside the Pawsey firewall
+DALiuGE Monitor that runs in a public network.
+
 --------------------------------------------------------------------------------
-          Pawsey Magnus / Galaxy              |     Public         |
-             Private Network                  |     Network        |
+                  Private                     |     Public         |
+                  Network                     |     Network        |
                                               |                    |
 +---------+                +----------+       |      +--------+    |
-|  DFMS   |                |  DFMS    |       |      | DFMS   |    |
-| DropMgr | <== socket ==> |  Proxy   |<== socket ==>| Monitor|<- http <- Client
+| DLG     |                |  DLG     |       |      | DLG    |    |
+| Manager | <== socket ==> |  Proxy   |<== socket ==>| Monitor|<- http <- Client
 +---------+                +----------+       |      +--------+    |   (Browser)
                                               |                    |
                                            FIREWALL             GATEWAY
@@ -50,7 +51,8 @@ import time
 import six
 import six.moves.BaseHTTPServer as BaseHTTPServer  # @UnresolvedImport
 
-from dfms.utils import b2s as b2s
+from ...utils import b2s
+
 
 BUFF_SIZE = 16384
 outstanding_conn = 20
@@ -59,7 +61,7 @@ default_proxy_port = 30000
 default_client_base_port = 30001
 FORMAT = "%(asctime)-15s [%(levelname)5.5s] %(name)s#%(funcName)s:%(lineno)s %(message)s"
 
-logger = logging.getLogger('deploy.pawsey.monitor')
+logger = logging.getLogger(__name__)
 delimit = b'@#%!$'
 dl = len(delimit)
 
@@ -73,12 +75,12 @@ def recvall(sock, count):
         count -= len(newbuf)
     return buf
 
-def send_to_dfms(sock, data):
+def send_to_proxy(sock, data):
     length = len(data)
     sock.sendall(struct.pack('!I', length))
     sock.sendall(data)
 
-def recv_from_dfms(sock):
+def recv_from_proxy(sock):
     lengthbuf = recvall(sock, 4)
     if (lengthbuf is None):
         return None
@@ -127,12 +129,12 @@ class Server(BaseHTTPServer.HTTPServer):
 
 sockandaddr = collections.namedtuple('sockandaddr', 'sock addr')
 
-class DFMSMonitor:
+class Monitor:
 
     def __init__(self, host='0.0.0.0', proxy_port=default_proxy_port, client_base_port=default_client_base_port, publication_port=default_publication_port):
         """
         host:             listening host (string)
-        proxy_port:       port exposed to the dfms proxy  (int)
+        proxy_port:       port exposed to the DALiuGE proxy  (int)
         client_base_port: base port exposed to the client (e.g. Firefox) (int)
         """
         self.host = host
@@ -331,7 +333,7 @@ class DFMSMonitor:
         proxyport = proxyaddr[1]
         self.proxy_sockets[proxyport] = sockandaddr(proxysock, proxyaddr)
         self.ifds.append(proxysock)
-        logger.info('Received new connection from dfms_proxy at %r, reading identification', proxyaddr)
+        logger.info('Received new connection from DALiuGE_proxy at %r, reading identification', proxyaddr)
 
         # Read the proxy ID and check we don't have duplicates
         # We've been receiving HTTP requests on this socket from time to time,
@@ -387,7 +389,7 @@ class DFMSMonitor:
     def on_proxy_data(self, sock):
 
         try:
-            data = recv_from_dfms(sock)
+            data = recv_from_proxy(sock)
         except socket.error:
             logger.warning("Error while reading data from proxy, will close it")
             self.remove_proxy_socket(sock)
@@ -400,12 +402,12 @@ class DFMSMonitor:
 
         at = data.find(delimit)
         if at == -1:
-            logger.error('No tag id from DFMS proxy, discard the message')
+            logger.error('No tag id from DALiuGE proxy, discard the message')
             return
 
         tag = data[0:at]
         tag_str = b2s(tag)
-        logger.debug("Received %s from DFMS proxy", tag)
+        logger.debug("Received %s from DALiuGE proxy", tag)
 
         if tag not in self.client_sockets:
             logger.warning("Client %s has already disconnected, discarding data from proxy", tag_str)
@@ -454,7 +456,7 @@ class DFMSMonitor:
             raise Exception("shouldn't happen, right?")
 
         try:
-            send_to_dfms(proxy_socket, delimit.join([tag, data]))
+            send_to_proxy(proxy_socket, delimit.join([tag, data]))
             logger.debug("Sent data from client %s to proxy", tag_str)
         except socket.error:
             logger.warning("Error while sending data to proxy, closing proxy connection")
@@ -467,7 +469,7 @@ def run(parser, args):
                     dest="host", help="The network interface the monitor is bind",
                     default='0.0.0.0')
     parser.add_option("-o", "--monitor_port", action="store", type="int",
-                    dest="monitor_port", help = "The monitor port exposed to the dfms proxy",
+                    dest="monitor_port", help = "The monitor port exposed to the DALiuGE proxy",
                     default=default_proxy_port)
     parser.add_option("-c", "--client_port", action="store", type="int",
                     dest="client_port", help = "The proxy port exposed to the client",
@@ -485,9 +487,9 @@ def run(parser, args):
         ll = logging.INFO
     logging.basicConfig(stream=sys.stdout, level=ll, format=FORMAT)
 
-    server = DFMSMonitor(options.host, options.monitor_port, options.client_port, publication_port=options.publication_port)
+    server = Monitor(options.host, options.monitor_port, options.client_port, publication_port=options.publication_port)
     try:
         server.main_loop()
     except KeyboardInterrupt:
-        logger.warning("Ctrl C - Stopping DFMS Monitor server")
+        logger.warning("Ctrl C - Stopping DALiuGE Monitor server")
         sys.exit(1)

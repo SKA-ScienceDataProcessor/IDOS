@@ -37,7 +37,7 @@ import subprocess
 import sys
 import time
 
-from dfms import __git_version__ as git_commit, utils
+from ... import __git_version__ as git_commit, utils
 
 
 sub_tpl_str = """#!/bin/bash --login
@@ -53,7 +53,7 @@ module swap PrgEnv-cray PrgEnv-gnu
 module load python/2.7.10
 module load mpi4py
 
-aprun -b -n $NUM_NODES -N 1 $PY_BIN -m dfms.deploy.pawsey.start_dfms_cluster -l $LOG_DIR $GRAPH_PAR $PROXY_PAR $GRAPH_VIS_PAR $LOGV_PAR $ZERORUN_PAR $MAXTHREADS_PAR $SNC_PAR $NUM_ISLANDS_PAR $ALL_NICS $CHECK_WITH_SESSION
+aprun -b -n $NUM_NODES -N 1 $PY_BIN -m dlg.deploy.pawsey.start_dfms_cluster -l $LOG_DIR $GRAPH_PAR $PROXY_PAR $GRAPH_VIS_PAR $LOGV_PAR $ZERORUN_PAR $MAXTHREADS_PAR $SNC_PAR $NUM_ISLANDS_PAR $ALL_NICS $CHECK_WITH_SESSION
 """
 
 sub_tpl = string.Template(sub_tpl_str)
@@ -124,8 +124,8 @@ class PawseyClient(object):
     4. how long to run
     5. whether to produce offline graph vis
     6. whether to attach proxy for remote monitoring, and if so provide
-        DFMS_MON_HOST
-        DFMS_MON_PORT
+        DLG_MON_HOST
+        DLG_MON_PORT
     7. Root directory of the Log files (Required)
     """
 
@@ -286,7 +286,7 @@ class LogParser(object):
     7.  unroll_time
     8.  translation_time
     9.  pg_spec_gen_time
-    10.  created_session_at_all_nodes_time
+    10. created_session_at_all_nodes_time
     11. graph_separation_time
     12. push_sub_graphs_to_all_nodes_time
     13. created_drops_at_all_nodes_time
@@ -426,9 +426,9 @@ class LogParser(object):
             # Check this is a dir and contains the NM log
             if not os.path.isdir(os.path.join(self._log_dir, df)):
                 continue
-            nm_logf = os.path.join(self._log_dir, df, 'dfmsNM.log')
-            nm_dim_logf = os.path.join(self._log_dir, df, 'dfmsDIM.log')
-            nm_mm_logf = os.path.join(self._log_dir, df, 'dfmsMM.log')
+            nm_logf = os.path.join(self._log_dir, df, 'dlgNM.log')
+            nm_dim_logf = os.path.join(self._log_dir, df, 'dlgDIM.log')
+            nm_mm_logf = os.path.join(self._log_dir, df, 'dlgMM.log')
             if not os.path.exists(nm_logf):
                 if (os.path.exists(nm_dim_logf) or os.path.exists(nm_mm_logf)):
                     num_dims += 1
@@ -506,14 +506,14 @@ class LogParser(object):
 
     def check_log_dir(self, log_dir):
         possible_logs = [
-        os.path.join(log_dir, '0', 'dfmsDIM.log'),
-        os.path.join(log_dir, '0', 'dfmsMM.log')
+        os.path.join(log_dir, '0', 'dlgDIM.log'),
+        os.path.join(log_dir, '0', 'dlgMM.log')
         ]
         for dim_log_f in possible_logs:
             if (os.path.exists(dim_log_f)):
                 self._dim_log_f = [dim_log_f]
                 if (dim_log_f == possible_logs[1]):
-                    cluster_log = os.path.join(log_dir, '0', 'start_dfms_cluster.log')
+                    cluster_log = os.path.join(log_dir, '0', 'start_dlg_cluster.log')
                     if (os.path.exists(cluster_log)):
                         self._dim_log_f.append(cluster_log)
                 return True
@@ -543,7 +543,7 @@ if __name__ == '__main__':
     parser.add_option("-m", "--monitor_host", action="store", type="string",
                     dest="mon_host", help="Monitor host IP (optional)", default=default_aws_mon_host)
     parser.add_option("-o", "--monitor_port", action="store", type="int",
-                    dest="mon_port", help="The port to bind dfms monitor", default=default_aws_mon_port)
+                    dest="mon_port", help="The port to bind DALiuGE monitor", default=default_aws_mon_port)
     parser.add_option("-v", "--verbose-level", action="store", type="int",
                     dest="verbose_level", help="Verbosity level (1-3) of the DIM/NM logging",
                     default=1)

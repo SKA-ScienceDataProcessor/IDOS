@@ -1,4 +1,10 @@
-#!/bin/bash 
+#!/bin/bash
+
+#SBATCH --nodes=2
+#SBATCH --partition=gpuq
+#SBATCH --gres=gpu:1
+#SBATCH --time=10:00:00
+#SBATCH --account=pawsey0245 
 
 source /home/blao/OSKAR/bashrc
 
@@ -8,6 +14,6 @@ LOG_DIR=$APP_ROOT"/logs/"$SID
 mkdir -p $LOG_DIR # to remove potential directory creation conflicts later
 GRAPH_DIR="/home/blao/OSKAR/IDOS/logical_graphs/Athena/spead2_receiver.json"
 CLUSTER="Tianhe2"
-srun -n 2 -N 2 -p gpuq -A pawsey0245 /group/pawsey0245/blao/pyml/bin/python $APP_ROOT"/start_dfms_cluster.py" -l $LOG_DIR -L $GRAPH_DIR -d -c $CLUSTER -v 3 
+srun -N 2 -n 2 -p gpuq -A pawsey0245 /group/pawsey0245/blao/pyml/bin/python -m dlg.deploy.pawsey.start_dfms_cluster -l $LOG_DIR -L $GRAPH_DIR -d -c $CLUSTER -v 3 
 
 #-R "receiver"

@@ -20,7 +20,7 @@
 #    MA 02111-1307  USA
 #
 """
-Start the DFMS cluster on Magnus / Galaxy at Pawsey
+Start the DALiuGE cluster on Magnus / Galaxy at Pawsey
 
 Current plan (as of 12-April-2016):
     1. Launch a number of Node Managers (NM) using MPI processes
@@ -42,11 +42,12 @@ import threading
 import time
 import uuid
 
-from dfms import utils, tool
-from dfms.deploy.pawsey import dfms_proxy
-from dfms.manager import cmdline as dfms_start
-from dfms.manager.client import NodeManagerClient, DataIslandManagerClient
-from dfms.manager.constants import NODE_DEFAULT_REST_PORT, \
+from . import dfms_proxy
+from ... import utils, tool
+from ...dropmake import pg_generator
+from ...manager import cmdline
+from ...manager.client import NodeManagerClient, DataIslandManagerClient
+from ...manager.constants import NODE_DEFAULT_REST_PORT, \
 ISLAND_DEFAULT_REST_PORT, MASTER_DEFAULT_REST_PORT
 
 
@@ -135,7 +136,7 @@ def start_node_mgr(log_dir, logv=1, max_threads=0, host=None):
     parser = optparse.OptionParser()
     args = ['-l', log_dir, '-%s' % lv, '-H', host, '-m', '1024', '-t',
             str(max_threads), '--no-dlm']
-    dfms_start.dlgNM(parser, args)
+    cmdline.dlgNM(parser, args)
 
 def start_dim(node_list, log_dir, logv=1):
     """
@@ -145,7 +146,7 @@ def start_dim(node_list, log_dir, logv=1):
     parser = optparse.OptionParser()
     args = ['-l', log_dir, '-%s' % lv, '-N', ','.join(node_list),
             '-H', '0.0.0.0', '-m', '2048']
-    dfms_start.dlgDIM(parser, args)
+    cmdline.dlgDIM(parser, args)
 
 def start_mm(node_list, log_dir, logv=1):
     """
@@ -157,7 +158,7 @@ def start_mm(node_list, log_dir, logv=1):
     parser = optparse.OptionParser()
     args = ['-l', log_dir, '-N', ','.join(node_list), '-%s' % lv,
             '-H', '0.0.0.0', '-m', '2048']
-    dfms_start.dlgMM(parser, args)
+    cmdline.dlgMM(parser, args)
 
 def monitor_graph(host, port, dump_path):
     """
@@ -207,19 +208,19 @@ def monitor_graph(host, port, dump_path):
             if (dt < GRAPH_MONITOR_INTERVAL):
                 time.sleep(GRAPH_MONITOR_INTERVAL - dt)
 
-def start_dfms_proxy(loc, dfms_host, dfms_port, monitor_host, monitor_port):
+def start_proxy(loc, dlg_host, dlg_port, monitor_host, monitor_port):
     """
-    Start the DFMS proxy server
+    Start the DALiuGE proxy server
     """
     proxy_id = loc + '%.3f' % time.time()
-    server = dfms_proxy.DFMSProxy(proxy_id, dfms_host, monitor_host, dfms_port, monitor_port)
+    server = dfms_proxy.ProxyServer(proxy_id, dlg_host, monitor_host, dlg_port, monitor_port)
     try:
         server.loop()
     except KeyboardInterrupt:
-        logger.warning("Ctrl C - Stopping DFMS Proxy server")
+        logger.warning("Ctrl C - Stopping DALiuGE Proxy server")
         sys.exit(1)
     except Exception:
-        logger.exception("DFMS proxy terminated unexpectedly")
+        logger.exception("DALiuGE proxy terminated unexpectedly")
         sys.exit(1)
 
 def set_env(rank):
@@ -234,8 +235,8 @@ def main():
     parser.add_option("-m", "--monitor_host", action="store", type="string",
                     dest="monitor_host", help="Monitor host IP (optional)")
     parser.add_option("-o", "--monitor_port", action="store", type="int",
-                    dest="monitor_port", help="The port to bind dfms monitor",
-                    default=dfms_proxy.default_dfms_monitor_port)
+                    dest="monitor_port", help="Monitor port",
+                    default=dfms_proxy.default_dlg_monitor_port)
     parser.add_option("-v", "--verbose-level", action="store", type="int",
                     dest="verbose_level", help="Verbosity level (1-3) of the DIM/NM logging",
                     default=1)
@@ -299,16 +300,16 @@ def main():
 
     log_dir = "{0}/{1}".format(options.log_dir, rank)
     os.makedirs(log_dir)
-    logfile = log_dir + "/start_dfms_cluster.log"
+    logfile = log_dir + "/start_dlg_cluster.log"
     FORMAT = "%(asctime)-15s [%(levelname)5.5s] [%(threadName)15.15s] %(name)s#%(funcName)s:%(lineno)s %(message)s"
     logging.basicConfig(filename=logfile, level=logging.DEBUG, format=FORMAT)
 
     if (num_procs > 1 and options.monitor_host is not None):
-        logger.info("Trying to start dfms_cluster with proxy")
+        logger.info("Trying to start DALiuGE cluster with proxy")
         run_proxy = True
         threshold = 2
     else:
-        logger.info("Trying to start dfms_cluster without proxy")
+        logger.info("Trying to start DALiuGE cluster without proxy")
         run_proxy = False
         threshold = 1
 
@@ -328,8 +329,8 @@ def main():
 
     proxy_ip = None
     if run_proxy:
-        # send island/master manager's IP address to the dfms proxy
-        # also let island manager know dfms proxy's IP
+        # send island/master manager's IP address to the DALiuGE proxy
+        # also let island manager know the DALiuGE proxy's IP
         if rank == 0:
             mgr_ip = origin_ip
             comm.send(mgr_ip, dest=1)
@@ -345,19 +346,18 @@ def main():
             if (run_proxy and rank == 1):
                 # Wait until the Island Manager is open
                 if utils.portIsOpen(mgr_ip, ISLAND_DEFAULT_REST_PORT, 100):
-                    start_dfms_proxy(options.loc, mgr_ip, ISLAND_DEFAULT_REST_PORT, options.monitor_host, options.monitor_port)
+                    start_proxy(options.loc, mgr_ip, ISLAND_DEFAULT_REST_PORT, options.monitor_host, options.monitor_port)
                 else:
                     logger.warning("Couldn't connect to the main drop manager, proxy not started")
             elif (run_node_mgr):
                 logger.info("Starting node manager on host {0}".format(origin_ip))
                 #add ip addr for spead2 sender
                 logger.info("Add spead receiver ip addr to spead json file")
-                spead_conf = json.loads(open('/home/blao/OSKAR/IDOS/spead/sender/spead_send.json').read())
+                spead_conf = json.loads(open('/home/blao//OSKAR/IDOS/spead/sender/spead_send.json').read())
                 spead_streams=spead_conf['streams']
                 spead_streams.append({'port': 41000, 'host': origin_ip})
-                with open('/home/blao/OSKAR/IDOS/spead/sender/spead_send.json','w') as f:
+                with open('/home/blao//OSKAR/IDOS/spead/sender/spead_send.json','w') as f:
                     json.dump(spead_conf,f)
-
                 start_node_mgr(log_dir, logv=logv,
                 max_threads=options.max_threads,
                 host=None if options.all_nics else origin_ip)
@@ -375,7 +375,8 @@ def main():
                 pip_name = utils.fname_to_pipname(options.logical_graph or options.physical_graph)
                 if options.logical_graph:
                     unrolled = tool.unroll(options.logical_graph, '1', options.zerorun, apps[options.app])
-                    pgt = tool.partition(unrolled, pip_name, len(node_mgrs), options.num_islands, 'metis')
+                    pgt = pg_generator.partition(unrolled, 'metis', num_partitions=len(node_mgrs))
+                    pgt = pgt.to_pg_spec([], ret_str=False, num_islands=1, tpl_nodes_len=len(node_mgrs) + 1)
                     del unrolled
                 else:
                     pgt = json.loads(options.physical_graph)
@@ -433,7 +434,9 @@ def main():
             pip_name = utils.fname_to_pipname(options.logical_graph or options.physical_graph)
             if options.logical_graph:
                 unrolled = tool.unroll(options.logical_graph, '1', options.zerorun, apps[options.app])
-                pgt = tool.partition(unrolled, pip_name, len(ip_list) - 1, options.num_islands, 'metis')
+                pgt = pg_generator.partition(unrolled, 'metis', num_partitions=len(ip_list) - 1, num_islands=options.num_islands)
+                pgt = pgt.to_pg_spec([], ret_str=False, num_islands=options.num_islands,
+                                     tpl_nodes_len=len(ip_list) - 1 + options.num_islands)
                 del unrolled
             else:
                 pgt = json.loads(options.physical_graph)
