@@ -17,6 +17,7 @@ import logging
 import math
 import sys
 import json
+import os.path as osp
 
 import oskar
 import spead2
@@ -96,7 +97,7 @@ class SpeadReceiver(object):
 
         # Stop the stream when there are no more heaps.
         self._stream.stop()
-    
+
 def get_ip_via_netifaces(loc=''):
     return utils.get_local_ip_addr()[0][0]
 
@@ -117,20 +118,22 @@ def main():
 
     # Append the port number to the output file root path.
     file_name = sys.argv[-1] + "_" + str(port) + ".ms"
-    
-    #add ip addr to sender 
+
+    #add ip addr to sender
     find_ip = get_ip_via_netifaces
     public_ip = find_ip("Pwasey")
     ip_adds = '{0}{1}'.format(public_ip, "")
     origin_ip = ip_adds.split(',')[0]
     print(origin_ip)
-   
-    with open("/home/blao/OSKAR/IDOS/spead/sender/spead_send.json", "r+") as jsonFile :
+
+    target_json = osp.jon(osp.dirname(osp.realpath(__file__)), '../sender/spead_send.json')
+
+    with open(target_json, "r+") as jsonFile :
         data = json.load(jsonFile)
         tmp = data["streams"]
         data["streams"]=[{'host': origin_ip, 'port': 41000}]
         jsonFile.write(json.dumps(data))
-    with open('/home/blao//OSKAR/IDOS/spead/sender/spead_send.json','w') as f:
+    with open(target_json,'w') as f:
         json.dump(data, f)
 
     # Set up the SPEAD receiver and run it (see method, above).
