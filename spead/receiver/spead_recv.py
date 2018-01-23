@@ -126,7 +126,7 @@ def main():
     origin_ip = ip_adds.split(',')[0]
     print(origin_ip)
 
-    target_json = osp.jon(osp.dirname(osp.realpath(__file__)), '../sender/spead_send.json')
+    target_json = osp.join(osp.dirname(osp.realpath(__file__)), '../sender/spead_send.json')
 
     with open(target_json, "r+") as jsonFile :
         data = json.load(jsonFile)
