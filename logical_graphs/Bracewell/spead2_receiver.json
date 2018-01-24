@@ -1,0 +1,6 @@
+{ "class": "go.GraphLinksModel",
+  "nodeDataArray": [ 
+{"category":"BashShellApp", "text":"Receiver", "execution_time":5, "num_cpus":1, "group_start":0, "Arg01":"python /home/wu082/proj/IDOS/spead/receiver/spead_recv.py 41000 %o[-6]", "Arg02":"", "Arg03":"", "Arg04":"", "Arg05":"", "Arg06":"", "Arg07":"", "Arg08":"", "Arg09":"", "Arg10":"", "key":-4, "loc":"-439.25 -679.6666717529297"},
+{"category":"file", "text":"MS File", "data_volume":5, "group_end":0, "check_filepath_exists":"1", "filepath":"", "dirname":"/flush1/wu082/jacal_data/", "key":-6, "loc":"-439 -585.3333282470703"}
+ ],
+  "linkDataArray": [ {"from":-4, "to":-6, "points":[-439.25,-660.6052480037757,-439.25,-650.6052480037757,-439.25,-636.3859547920897,-439,-636.3859547920897,-439,-622.1666615804036,-439,-612.1666615804036]} ]}
