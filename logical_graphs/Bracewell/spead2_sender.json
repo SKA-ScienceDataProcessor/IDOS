@@ -3,7 +3,7 @@
 {"category":"BashShellApp", "text":"Sender", "execution_time":50, "num_cpus":1, "group_start":0, "Arg01":"python /home/wu082/proj/IDOS/spead/sender/spead_send.py %i[-6] %i[-3]", "Arg02":"", "Arg03":"", "Arg04":"", "Arg05":"", "Arg06":"", "Arg07":"", "Arg08":"", "Arg09":"", "Arg10":"", "key":-4, "loc":"-646.5833282470701 -760.6666717529293", "group":-12},
 {"category":"file", "text":"Spead send json file", "data_volume":5, "group_end":0, "check_filepath_exists":"1", "filepath":"/home/wu082/proj/IDOS/conf/spead_send.json", "dirname":"", "key":-6, "loc":"-621.5833282470703 -550.1666717529297"},
 {"category":"file", "text":"OSKAR simulation interometer ini file", "data_volume":5, "group_end":0, "check_filepath_exists":"1", "filepath":"/home/wu082/proj/IDOS/conf/Bracewell/oskar_sim_interferometer.ini", "dirname":"", "key":-3, "loc":"-431.5833282470703 -716.1666717529297"},
-{"category":"SplitData", "text":"Scatter", "isGroup":true, "num_of_copies":2, "scatter_axis":"time", "key":-12, "loc":"-646.5833282470701 -760.6666717529292"}
+{"category":"SplitData", "text":"Scatter", "isGroup":true, "num_of_copies":4, "scatter_axis":"time", "key":-12, "loc":"-646.5833282470701 -760.6666717529292"}
  ],
   "linkDataArray": [ 
 {"from":-3, "to":-4, "points":[-505.2443389892578,-716.1666717529297,-515.2443389892578,-716.1666717529297,-558.4649454740559,-716.1666717529297,-558.4649454740559,-760.6666717529297,-601.6855519588538,-760.6666717529297,-611.6855519588538,-760.6666717529297]},
