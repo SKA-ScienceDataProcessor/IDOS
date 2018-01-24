@@ -56,6 +56,12 @@ def register_receiver():
         q.put_nowait(recvr_ip)
         logger.info("Register receiver IP %s from %s" % (recvr_ip, get_client_ip()))
 
+@get('/clr_receiver')
+def clear_receiver():
+    with q.mutex:
+        q.queue.clear()
+        logger.info("Clear receiver IP")
+
 if __name__ == '__main__':
     args = get_cmd_args()
     signal.signal(signal.SIGTERM, \
