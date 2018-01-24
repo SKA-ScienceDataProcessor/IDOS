@@ -50,6 +50,7 @@ Launch one receiver script per SPEAD stream.
 from __future__ import division, print_function
 import logging
 import sys
+import commands
 
 import numpy
 import oskar
@@ -64,7 +65,7 @@ class SpeadSender(oskar.Interferometer):
     Inherits oskar.Interferometer to send data in the process_block() method.
     SPEAD is configured using a Python dictionary passed to the constructor.
     """
-    def __init__(self, log, spead_config, precision=None, oskar_settings=None):
+    def __init__(self, log, spead_config, host, precision=None, oskar_settings=None):
         oskar.Interferometer.__init__(self, precision, oskar_settings)
         self._log = log
         self._streams = []
@@ -80,8 +81,8 @@ class SpeadSender(oskar.Interferometer):
             threads = stream['threads'] if 'threads' in stream else 1
             thread_pool = spead2.ThreadPool(threads=threads)
             log.info("Creating SPEAD stream for host {} on port {} ..."
-                     .format(stream['host'], stream['port']))
-            udp_stream = spead2.send.UdpStream(thread_pool, stream['host'],
+                     .format(host, stream['port']))
+            udp_stream = spead2.send.UdpStream(thread_pool, host,
                                                stream['port'], stream_config)
             item_group = spead2.send.ItemGroup(
                 flavour=spead2.Flavour(4, 64, 40, 0))
@@ -230,10 +231,16 @@ def main():
 
     # Load the OSKAR settings INI file for the application.
     settings = oskar.SettingsTree('oskar_sim_interferometer', sys.argv[-1])
+    
+    # get host ip
+    cmd_read_ip = 'curl  http://sdp-dfms.ddns.net:8096/get_receiver'
+    get_ip = commands.getoutput(cmd_read_ip)
+    host = get_ip.split('\n')[-1]
 
     # Set up the SPEAD sender and run it (see method, above).
-    sender = SpeadSender(log, spead_config, oskar_settings=settings)
-    sender.run()
+    if host != 'NULL':
+        sender = SpeadSender(log, spead_config, host, oskar_settings=settings)
+        sender.run()
 
 
 if __name__ == '__main__':

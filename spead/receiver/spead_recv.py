@@ -18,6 +18,7 @@ import math
 import sys
 import json
 import os.path as osp
+import os,commands
 
 import oskar
 import spead2
@@ -119,22 +120,17 @@ def main():
     # Append the port number to the output file root path.
     file_name = sys.argv[-1] + "_" + str(port) + ".ms"
 
-    #add ip addr to sender
+    #get ip addr on compute node
     find_ip = get_ip_via_netifaces
     public_ip = find_ip("Pwasey")
     ip_adds = '{0}{1}'.format(public_ip, "")
     origin_ip = ip_adds.split(',')[0]
     print(origin_ip)
 
-    target_json = osp.join(osp.dirname(osp.realpath(__file__)), '../sender/spead_send.json')
-
-    with open(target_json, "r+") as jsonFile :
-        data = json.load(jsonFile)
-        tmp = data["streams"]
-        data["streams"]=[{'host': origin_ip, 'port': 41000}]
-        jsonFile.write(json.dumps(data))
-    with open(target_json,'w') as f:
-        json.dump(data, f)
+    #target_json = osp.join(osp.dirname(osp.realpath(__file__)), '../sender/spead_send.json')
+    #reg ip addr to sdp-dfms.ddns.net:8096 server
+    cmd_ip='curl  http://sdp-dfms.ddns.net:8096/reg_receiver?ip=%s' % origin_ip
+    os.system(cmd_ip)
 
     # Set up the SPEAD receiver and run it (see method, above).
     receiver = SpeadReceiver(log, port, file_name)
