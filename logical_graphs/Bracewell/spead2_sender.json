@@ -1,10 +1,11 @@
 { "class": "go.GraphLinksModel",
   "nodeDataArray": [ 
-{"category":"BashShellApp", "text":"Sender", "execution_time":5, "num_cpus":1, "group_start":0, "Arg01":"python /home/wu082/proj/IDOS/spead/sender/spead_send.py %i[-6] %i[-3]", "Arg02":"", "Arg03":"", "Arg04":"", "Arg05":"", "Arg06":"", "Arg07":"", "Arg08":"", "Arg09":"", "Arg10":"", "key":-4, "loc":"-431.5833282470703 -537.6666717529297"},
+{"category":"BashShellApp", "text":"Sender", "execution_time":50, "num_cpus":1, "group_start":0, "Arg01":"python /home/wu082/proj/IDOS/spead/sender/spead_send.py %i[-6] %i[-3]", "Arg02":"", "Arg03":"", "Arg04":"", "Arg05":"", "Arg06":"", "Arg07":"", "Arg08":"", "Arg09":"", "Arg10":"", "key":-4, "loc":"-646.5833282470701 -760.6666717529293", "group":-12},
 {"category":"file", "text":"Spead send json file", "data_volume":5, "group_end":0, "check_filepath_exists":"1", "filepath":"/home/wu082/proj/IDOS/conf/spead_send.json", "dirname":"", "key":-6, "loc":"-621.5833282470703 -550.1666717529297"},
-{"category":"file", "text":"OSKAR simulation interometer ini file", "data_volume":5, "group_end":0, "check_filepath_exists":"1", "filepath":"/home/wu082/proj/IDOS/conf/Bracewell/oskar_sim_interferometer.ini", "dirname":"", "key":-3, "loc":"-431.5833282470703 -716.1666717529297"}
+{"category":"file", "text":"OSKAR simulation interometer ini file", "data_volume":5, "group_end":0, "check_filepath_exists":"1", "filepath":"/home/wu082/proj/IDOS/conf/Bracewell/oskar_sim_interferometer.ini", "dirname":"", "key":-3, "loc":"-431.5833282470703 -716.1666717529297"},
+{"category":"SplitData", "text":"Scatter", "isGroup":true, "num_of_copies":2, "scatter_axis":"time", "key":-12, "loc":"-646.5833282470701 -760.6666717529292"}
  ],
   "linkDataArray": [ 
-{"from":-3, "to":-4, "points":[-431.58332824706986,-676.3333384195964,-431.58332824706986,-666.3333384195964,-431.58332824706986,-616.53071696084,-431.5833282470703,-616.53071696084,-431.5833282470703,-566.7280955020836,-431.5833282470703,-556.7280955020836]},
-{"from":-6, "to":-4, "points":[-542.5833282470697,-550.1666717529296,-532.5833282470697,-550.1666717529296,-504.46404012164703,-550.1666717529296,-504.46404012164703,-537.6666717529297,-476.34475199622426,-537.6666717529297,-466.34475199622426,-537.6666717529297]}
+{"from":-3, "to":-4, "points":[-505.2443389892578,-716.1666717529297,-515.2443389892578,-716.1666717529297,-558.4649454740559,-716.1666717529297,-558.4649454740559,-760.6666717529297,-601.6855519588538,-760.6666717529297,-611.6855519588538,-760.6666717529297]},
+{"from":-6, "to":-4, "points":[-621.5833282470703,-577.2295455932617,-621.5833282470703,-587.2295455932617,-621.5833282470703,-659.3485346464191,-646.5833282470702,-659.3485346464191,-646.5833282470702,-731.4675236995765,-646.5833282470702,-741.4675236995765]}
  ]}
