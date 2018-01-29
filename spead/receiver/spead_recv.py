@@ -100,7 +100,7 @@ class SpeadReceiver(object):
         self._stream.stop()
 
 def get_ip_via_netifaces(loc=''):
-    return utils.get_local_ip_addr()[0][0]
+    return utils.get_local_ip_addr()[1][0]
 
 def main():
     """Main function for OSKAR SPEAD receiver module."""
