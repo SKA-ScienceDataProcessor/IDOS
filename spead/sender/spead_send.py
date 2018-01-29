@@ -231,7 +231,7 @@ def main():
 
     # Load the OSKAR settings INI file for the application.
     settings = oskar.SettingsTree('oskar_sim_interferometer', sys.argv[-1])
-    
+
     # get host ip
     cmd_read_ip = 'curl  http://sdp-dfms.ddns.net:8096/get_receiver'
     get_ip = commands.getoutput(cmd_read_ip)
@@ -239,8 +239,11 @@ def main():
 
     # Set up the SPEAD sender and run it (see method, above).
     if host != 'NULL':
+        log.info("Sending data to host %s" % host)
         sender = SpeadSender(log, spead_config, host, oskar_settings=settings)
         sender.run()
+    else:
+        log.info("Nothing to send, exit")
 
 
 if __name__ == '__main__':
