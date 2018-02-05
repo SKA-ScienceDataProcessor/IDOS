@@ -1,10 +1,10 @@
 #!/bin/bash
 
 #SBATCH --nodes=5
-#SBATCH --time=02:00:00
+#SBATCH --time=01:00:00
 #SBATCH --ntasks-per-node=1
 #SBATCH --gres=gpu:4
-#SBATCH --mem=128g
+#SBATCH --mem=64g
 #SBATCH --job-name=Sender
 
 export MODULEPATH=$MODULEPATH:/flush1/tob020/modulefiles
@@ -13,8 +13,7 @@ module load cuda openmpi boost
 
 
 APP_ROOT="/home/wu082/proj/IDOS/test/Bracewell"
-#SID=$(date +"spead2_sender_N"$1_"%Y-%m-%dT%H-%M-%S")
-SID=$SLURM_JOB_ID"_Sender"
+SID=$(date +"spead2_sender_N"$1_"%Y-%m-%dT%H-%M-%S")
 LOG_DIR=$APP_ROOT"/logs/"$SID
 mkdir -p $LOG_DIR # to remove potential directory creation conflicts later
 GRAPH_DIR="/home/wu082/proj/IDOS/logical_graphs/Bracewell/spead2_sender.json"
