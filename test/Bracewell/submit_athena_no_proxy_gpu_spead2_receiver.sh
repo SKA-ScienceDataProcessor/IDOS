@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH --nodes=6
+#SBATCH --nodes=5
 #SBATCH --time=01:00:00
 #SBATCH --ntasks-per-node=1
 #SBATCH --gres=gpu:4
@@ -19,6 +19,6 @@ mkdir -p $LOG_DIR # to remove potential directory creation conflicts later
 GRAPH_DIR="/home/wu082/proj/IDOS/logical_graphs/Bracewell/spead2_receiver.json"
 CLUSTER="Bracewell"
 source /flush1/tob020/venvs/jacal/bin/activate
-mpirun -np 6  python -m dlg.deploy.pawsey.start_dfms_cluster -l $LOG_DIR -L $GRAPH_DIR -d -c $CLUSTER -v 3 
+mpirun -np 5  python -m dlg.deploy.pawsey.start_dfms_cluster -l $LOG_DIR -L $GRAPH_DIR -d -c $CLUSTER -v 3 
 
 #-R "receiver"
