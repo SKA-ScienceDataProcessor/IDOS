@@ -107,18 +107,27 @@ def main():
     # Check command line arguments.
     if len(sys.argv) < 3:
         raise RuntimeError('Usage: python spead_recv.py '
-                           '<port> <output_root_name>')
+                           '<port> <output_root_name> [mpi]')
+    if (len(sys.argv) == 4 and sys.argv[-1] == 'mpi'):
+        from mpi4py import MPI  # @UnresolvedImport
+        comm = MPI.COMM_WORLD  # @UndefinedVariable
+        rank = comm.Get_rank()
+        # Get socket port number.
+        port = int(sys.argv[1])
+
+        # Append the port number to the output file root path.
+        file_name = sys.argv[2] + "_" + str(rank) + "_" + str(port) + ".ms"
+    else:
+        # Get socket port number.
+        port = int(sys.argv[-2])
+
+        # Append the port number to the output file root path.
+        file_name = sys.argv[-1] + "_" + str(port) + ".ms"
 
     # Get logger.
     log = logging.getLogger()
     log.addHandler(logging.StreamHandler(stream=sys.stdout))
     log.setLevel(logging.DEBUG)
-
-    # Get socket port number.
-    port = int(sys.argv[-2])
-
-    # Append the port number to the output file root path.
-    file_name = sys.argv[-1] + "_" + str(port) + ".ms"
 
     #get ip addr on compute node
     find_ip = get_ip_via_netifaces
