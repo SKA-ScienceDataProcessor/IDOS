@@ -6,7 +6,7 @@
     {
       "category": "Component",
       "text": "Receiver",
-      "execution_time": 5,
+      "execution_time": 500,
       "num_cpus": 1,
       "group_start": 0,
       "appclass": "jacal.apps.OSKAR2SpeadReceiver",
