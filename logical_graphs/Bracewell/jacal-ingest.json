@@ -73,7 +73,7 @@
       "group_end": 0,
       "check_filepath_exists": "1",
       "filepath": "",
-      "dirname": "",
+      "dirname": "/flush1/wu082/jacal_data/",
       "key": -7,
       "loc": "-382.32812500000017 -669.0000000000001",
       "group": -12
@@ -82,7 +82,7 @@
       "category": "SplitData",
       "text": "Scatter",
       "isGroup": true,
-      "num_of_copies": 4,
+      "num_of_copies": 5,
       "scatter_axis": "time",
       "key": -12,
       "loc": "-734.9254760742188 -669"
