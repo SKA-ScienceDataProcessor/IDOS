@@ -215,7 +215,7 @@ class SpeadSender(oskar.Interferometer):
 
 def _get_receiver_host(queue_host='sdp-dfms.ddns.net', queue_port=8096):
     try:
-        con = httplib.HTTPConnection('sdp-dfms.ddns.net', 8096)
+        con = httplib.HTTPConnection(queue_host, queue_port)
         con.request('GET', '/get_receiver')
         response = con.getresponse()
         #print(response.status, response.reason)
