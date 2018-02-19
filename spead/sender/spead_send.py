@@ -50,13 +50,14 @@ Launch one receiver script per SPEAD stream.
 from __future__ import division, print_function
 import logging
 import sys
-import commands
 
 import numpy
 import oskar
 import simplejson as json
 import spead2
 import spead2.send
+
+import six.moves.http_client as httplib
 
 
 class SpeadSender(oskar.Interferometer):
@@ -212,6 +213,17 @@ class SpeadSender(oskar.Interferometer):
             # Send the start of stream message to each stream.
             stream.send_heap(item_group.get_start())
 
+def _get_receiver_host(queue_host='sdp-dfms.ddns.net', queue_port=8096):
+    try:
+        con = httplib.HTTPConnection('sdp-dfms.ddns.net', 8096)
+        con.request('GET', '/get_receiver')
+        response = con.getresponse()
+        #print(response.status, response.reason)
+        host = response.read()
+        return host
+    except Exception as exp:
+        log.error("Fail to get receiver ip from the queue: %s" % str(exp))
+        return 'NULL'
 
 def main():
     """Main function for OSKAR SPEAD sender module."""
@@ -233,9 +245,10 @@ def main():
     settings = oskar.SettingsTree('oskar_sim_interferometer', sys.argv[-1])
 
     # get host ip
-    cmd_read_ip = 'curl  http://sdp-dfms.ddns.net:8096/get_receiver'
-    get_ip = commands.getoutput(cmd_read_ip)
-    host = get_ip.split('\n')[-1]
+    # cmd_read_ip = 'curl  http://sdp-dfms.ddns.net:8096/get_receiver'
+    # get_ip = commands.getoutput(cmd_read_ip)
+    # host = get_ip.split('\n')[-1]
+    host = _get_receiver_host()
 
     # Set up the SPEAD sender and run it (see method, above).
     if host != 'NULL':

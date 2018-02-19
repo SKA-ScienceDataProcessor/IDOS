@@ -18,7 +18,7 @@ import math
 import sys
 import json
 import os.path as osp
-import os,commands
+import os
 
 import oskar
 import spead2
