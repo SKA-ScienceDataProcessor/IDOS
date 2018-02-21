@@ -52,6 +52,7 @@ if __name__ == '__main__':
     tm_path='/group/pawsey0245/rdodson/IDOS/spead/sender/telescope.tm'
     tm_path='/group/pawsey0245/rdodson/IDOS/spead/sender/mwa2.tm'
     tm_path='/group/pawsey0245/rdodson/IDOS/spead/sender/ska1_low.tm'
+    tm_path='/group/pawsey0245/rdodson/IDOS/spead/sender/epa+mwa.tm'
     tel.load(tm_path)
     print('No of Stations: '+str(tel.num_stations)+' No of Baselines '+str(tel.num_baselines))
     # Set station properties after stations have been defined.
