@@ -1,0 +1,2 @@
+## This is (approx) centre of ASKAP
+116.629636, -26.696521, 300
