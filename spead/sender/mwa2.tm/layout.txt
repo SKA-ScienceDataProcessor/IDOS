@@ -1,3 +1,4 @@
+## MWA-2 measured positions for first 256 plus MWA-1 positions, which are not from same source
 -303.33, 1425.7, 0
 35.323, 1181.1, 0
 746.23, 1177.1, 0
