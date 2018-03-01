@@ -22,8 +22,8 @@ if __name__ == '__main__':
     # Set up the sky model.
     oskar_sky_model='/group/pawsey0245/rdodson/IDOS/spead/sender/sky_Cen_A.osm'
     phase_centre_ra_deg=199.6
-    phase_centre_dec_deg=-46.0
-    num_channels=3
+    phase_centre_dec_deg=-45.0
+    num_channels=1
     start_frequency_hz=100000000
     frequency_inc_hz=20000000
     oskar_sky_model='/group/pawsey0245/rdodson/IDOS/oskarpy/examples/gleam_mod.si.mod'
@@ -35,9 +35,9 @@ if __name__ == '__main__':
     #frequency_inc_hz=20000000
     #phase_centre_ra_deg=20
     #phase_centre_dec_deg=-30
-    #num_time_steps=24
-    #start_time_utc='01-01-2000 12:00:00.000'
-    #length='12:00:00.000'
+    num_time_steps=24
+    start_time_utc='01-01-2000 00:00:00.000'
+    length='10:00:00.000'
 
     #sky = oskar.Sky.generate_grid(phase_centre_ra_deg, phase_centre_dec_deg,
     #                              16, 1.5, precision=precision)
@@ -49,10 +49,11 @@ if __name__ == '__main__':
     tel.set_channel_bandwidth(frequency_inc_hz)
     tel.set_time_average(5.0)
     tel.set_pol_mode('Scalar')
-    tm_path='/group/pawsey0245/rdodson/IDOS/spead/sender/telescope.tm'
     tm_path='/group/pawsey0245/rdodson/IDOS/spead/sender/mwa2.tm'
     tm_path='/group/pawsey0245/rdodson/IDOS/spead/sender/ska1_low.tm'
     tm_path='/group/pawsey0245/rdodson/IDOS/spead/sender/epa+mwa.tm'
+    tm_path='/group/pawsey0245/rdodson/IDOS/spead/sender/aa4.tm'
+    tm_path='/group/pawsey0245/rdodson/IDOS/spead/sender/telescope.tm'
     tm_path='/group/pawsey0245/rdodson/IDOS/spead/sender/aa1.tm'
     tel.load(tm_path)
     print('No of Stations: '+str(tel.num_stations)+' No of Baselines '+str(tel.num_baselines))
@@ -78,7 +79,7 @@ if __name__ == '__main__':
     simulator.set_telescope_model(tel)
     simulator.set_observation_frequency(100.0e6)
     simulator.set_observation_time(
-        start_time_mjd_utc=51545.0, length_sec=43200.0, num_time_steps=num_time_steps)
+        start_time_mjd_utc=51545.5, length_sec=43200.0, num_time_steps=num_time_steps)
     # 01-01-2000 12UT
     simulator.set_output_measurement_set(output_root+'.ms')
 
