@@ -1,5 +1,5 @@
 ## From SKA1-LOW CONFIGURATION COORDINATES – COMPLETE SET SKA-TEL-SKO-0000422
-## I have take all of South Arm, plus most of the Centre
+## I have taken all of South Arm, plus most of the Centre
 116.7631025 -26.82522621
 116.7647773 -26.8246256
 116.7642328 -26.82304955
