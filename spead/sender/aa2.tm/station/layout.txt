@@ -1,8 +1,8 @@
-## From Randall 21/02/2018
-# original coords of AAVS1 and EDA in meters East and North
+# Original coords of AAVS1 and EDA in meters East and North were
+# provided by Randall Wayth on 21/02/2018.
 # (note AAVS1 has centre antenna moved compared to this file)
-## Then scaled as 35/40 as according to
-## Table 1 in SKA-TEL-SKO-0000422_03_SKA1_LowConfigurationCoordinates.pdf
+# Then scaled to 38 m effective station diameter. See parameter D1,
+# table 1 in SKA-TEL-SKO-0000422_03_SKA1_LowConfigurationCoordinates.pdf
 -16.047 -8.313
 11.032 2.107
 -2.308 6.007
