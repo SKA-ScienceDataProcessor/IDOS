@@ -50,6 +50,7 @@ Launch one receiver script per SPEAD stream.
 from __future__ import division, print_function
 import logging
 import sys
+import time
 
 import numpy
 import oskar
@@ -71,6 +72,8 @@ class SpeadSender(oskar.Interferometer):
         self._log = log
         self._streams = []
         self._vis_pack = None
+        self._sent_counter = 0
+        self._stt = 0.0
 
         # Construct UDP streams and associated item groups.
         stream_config = spead2.send.StreamConfig(
@@ -117,6 +120,7 @@ class SpeadSender(oskar.Interferometer):
         # Initialise SPEAD heaps if required.
         if block_index == 0:
             self._create_heaps(block)
+            self._stt = time.time()
 
             # Write the header information to each SPEAD stream.
             for stream_index, (_, heap) in enumerate(self._streams):
@@ -140,6 +144,7 @@ class SpeadSender(oskar.Interferometer):
         # Loop over all times and channels in the block.
         self._log.info("Sending visibility block {}/{}"
                        .format(block_index + 1, self.num_vis_blocks))
+        #self._log.info("block.num_times = %d, block.num_channels %d" % (block.num_times, block.num_channels))
         for t in range(block.num_times):
             for c in range(block.num_channels):
                 # Get the SPEAD stream for this channel index.
@@ -162,6 +167,13 @@ class SpeadSender(oskar.Interferometer):
                 heap['vis'].value = self._vis_pack
                 heap['time_index'].value = block.start_time_index + t
                 stream.send_heap(heap.get_heap())
+                """
+                self._sent_counter += 1
+                if (self._sent_counter % 100 == 0):
+                    edt = time.time()
+                    self._log.info("%d streams, %.3f seconds" % (self._sent_counter, (edt - self._stt)))
+                    self._stt = edt
+                """
 
     def _create_heaps(self, block):
         """Create SPEAD heap items based on content of the visibility block.
