@@ -19,11 +19,18 @@ def parse_args():
 
     return args
 
+class EqualsSpaceRemover:
+    output_file = None
+    def __init__( self, new_output_file ):
+        self.output_file = new_output_file
+
+    def write( self, what ):
+        self.output_file.write( what.replace( " = ", "=", 1 ) )
 
 if __name__ == "__main__":
     args = parse_args()
     #sky model 
-    sky_model = args.skymodel
+    sky_model = args.sky_model
     #number of time steps 
     num_time_steps = [1, 6, 60, 600, 1200]
 
@@ -35,21 +42,22 @@ if __name__ == "__main__":
 
     for n in num_time_steps:
        #create a new conf file
-       ms_file = './data/n%s.ms' % n 
+       ms_file = "./data/n%s.ms" % n 
        config.set('interferometer', 'ms_filename', ms_file)
        config.set('observation', 'num_time_steps', str(n)) 
-       config.set('sky', 'oskar_sky_model\file', sky_model)
+       config.set('sky', 'oskar_sky_model\\file', sky_model)
        with open(ini_file, 'w+') as configfile:
-            config.write(configfile)
+            config.write(EqualsSpaceRemover(configfile))
+       
        clock_start = time.time()
        subprocess.call(["oskar_sim_interferometer", ini_file])
        clock_end = time.time()
        #record oskar run time
        log_string = '%i %09i %.1f' % \
-                   (num_time_steps, start_freq, (clock_end - clock_start))
+                   (n, start_freq, (clock_end - clock_start))
 
        sky_split = sky_model.split("_")[-1]
-       log_file = "./results/data_log_%s" % sky_split 
+       log_file = "./results/data_log_%s.txt" % sky_split 
        with open(log_file, "a") as f:
            f.write(log_string + '\n')
 
