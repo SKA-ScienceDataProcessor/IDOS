@@ -35,11 +35,11 @@ if __name__ == "__main__":
 
     for n in num_time_steps:
        #create a new conf file
-       ms_file = './data/n%s.ms' %s n 
+       ms_file = './data/n%s.ms' % n 
        config.set('interferometer', 'ms_filename', ms_file)
        config.set('observation', 'num_time_steps', str(n)) 
        config.set('sky', 'oskar_sky_model\file', sky_model)
-       with open(ini_file 'w+') as configfile:
+       with open(ini_file, 'w+') as configfile:
             config.write(configfile)
        clock_start = time.time()
        subprocess.call(["oskar_sim_interferometer", ini_file])
