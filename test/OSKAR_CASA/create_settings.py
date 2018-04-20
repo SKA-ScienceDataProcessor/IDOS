@@ -53,8 +53,8 @@ if __name__ == '__main__':
     config.set('observation', 'length', '1.0')
     config.set('observation', 'num_channels', '1')
     config.set('observation', 'num_time_steps', '10')
-    config.set('observation', 'phase_centre_dec_deg', '-46.0')
-    config.set('observation', 'phase_centre_ra_deg', '199.6')
+    config.set('observation', 'phase_centre_dec_deg', '-43.02')
+    config.set('observation', 'phase_centre_ra_deg', '201.36')
     config.set('observation', 'start_frequency_hz', str(freq))
     config.set('observation', 'start_time_utc', '01-01-2015 18:00:00.0')
     #simulator

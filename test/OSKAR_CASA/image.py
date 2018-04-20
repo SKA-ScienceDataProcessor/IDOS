@@ -119,8 +119,8 @@ if __name__ == "__main__":
                                                                   column))
     t0 = time.time()
     casa_image(ms, '{}'.format(root_name), column,
-                    [512,512], [3,3],
-                    199.6, -46,
+                    [512,512], [4,4],
+                    201.36, -43.02,
                     "uniform", Nfacet, NID, 0)
     print ('*' * 80)
     print ('  - Finished imaging in %.3fs' % (time.time() - t0))
