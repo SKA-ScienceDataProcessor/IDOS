@@ -15,6 +15,9 @@ def parse_args():
     parser.add_argument('--skymodel', dest='sky_model', help='a sky model file',
                         default='./sky_model/sky_cen_A_1k.mod', type=str)
 
+    parser.add_argument('--inifile', dest='ini_file', help='config ini file',
+                        default='./conf/sim_cenA.ini', type=str)
+
     args = parser.parse_args()
 
     return args
@@ -34,7 +37,7 @@ if __name__ == "__main__":
     #number of time steps 
     num_time_steps = [1, 6, 60, 600, 1200]
 
-    ini_file = './conf/sim_cenA.ini' 
+    ini_file = args.ini_file 
 
     config = ConfigParser.RawConfigParser()
     config.read(ini_file)    
