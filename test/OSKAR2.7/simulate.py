@@ -48,6 +48,9 @@ if __name__ == "__main__":
        ms_file = "./data/n%s.ms" % n 
        config.set('interferometer', 'ms_filename', ms_file)
        config.set('observation', 'num_time_steps', str(n)) 
+       integration_time = 1 #unit:seconds
+       obs_length = n/integration_time
+       config.set('observation', 'length', str(obs_length))
        config.set('sky', 'oskar_sky_model\\file', sky_model)
        with open(ini_file, 'w+') as configfile:
             config.write(EqualsSpaceRemover(configfile))
