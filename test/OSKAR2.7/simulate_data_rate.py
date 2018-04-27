@@ -55,7 +55,7 @@ if __name__ == "__main__":
        obs_length = n/integration_time
        config.set('observation', 'length', str(obs_length))
        config.set('sky', 'oskar_sky_model\\file', sky_model)
-       config.set('telescope', 'input_directory', args.tele_model)
+       config.set('telescope', 'input_directory', args.tele_mode)
        with open(ini_file, 'w+') as configfile:
             config.write(EqualsSpaceRemover(configfile))
        
