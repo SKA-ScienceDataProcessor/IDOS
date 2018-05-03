@@ -52,9 +52,9 @@ if __name__ == '__main__':
     config.set('interferometer', 'time_average_sec', '0.0')
     #observation
     config.add_section('observation')    
-    config.set('observation', 'length', '1.0')
+    config.set('observation', 'length', '100.0')
     config.set('observation', 'num_channels', '1')
-    config.set('observation', 'num_time_steps', '10')
+    config.set('observation', 'num_time_steps', '100')
     config.set('observation', 'phase_centre_dec_deg', '-43.02')
     config.set('observation', 'phase_centre_ra_deg', '201.36')
     config.set('observation', 'start_frequency_hz', str(freq))
