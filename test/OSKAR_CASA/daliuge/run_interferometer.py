@@ -41,5 +41,5 @@ if __name__ == '__main__':
        config.set('interferometer', 'ms_filename', output_msfile)
        with open(ini_file, 'w+') as configfile:
             config.write(EqualsSpaceRemover(configfile)) 
-       subprocess.call(["/BIGDATA/ac_shao_tan_1/OSKAR/OSKAR-2.7/bin/oskar_sim_interferometer", ini_file])
+       subprocess.call(["/BIGDATA1/ac_shao_tan_1/OSKAR/OSKAR-2.7/bin/oskar_sim_interferometer", ini_file])
     
