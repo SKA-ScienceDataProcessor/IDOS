@@ -54,8 +54,8 @@ def casa_image(ms, rootname, data_column, imsize, fov, ra0, dec0,
        imsize[0]=int(imsize[0]/M)             # Image is now M^2 smaller
        imsize[1]=int(imsize[1]/M)
        dfov=fov[0]/M
-       ra0=(ra0-dfov/2)+nx*dfov
-       dec0=(dec0-dfov/2)+ny*dfov   
+       ra0=(ra0-fov[0]/2)+nx*dfov
+       dec0=(dec0-fov[0]/2)+ny*dfov   
        #cell = fov_to_cellsize(dfov, imsize)
        print ('+ Facet no %d (%d,%d) has RA/DEC %.3f,%0.3f' % (NID, nx,ny,ra0,dec0))
       
