@@ -5,6 +5,7 @@ import subprocess
 import argparse
 import numpy
 import ConfigParser
+import json
 
 
 class EqualsSpaceRemover:
@@ -30,12 +31,20 @@ if __name__ == '__main__':
     ini_file = args.output_ini
     ms_file = "%s.ms" % ini_file
 
-    sky_model = '/BIGDATA/ac_shao_tan_1/OSKAR/IDOS/test/OSKAR_CASA/daliuge/sky_Cen_A_si.osm'
-    tele_input_dir = '/BIGDATA/ac_shao_tan_1/OSKAR/IDOS/test/OSKAR_CASA/daliuge/ska1_low.tm'
+    sky_model = '/BIGDATA1/ac_shao_tan_1/OSKAR/IDOS/test/OSKAR_CASA/daliuge/sky_Cen_A_si.osm'
+    tele_input_dir = '/BIGDATA1/ac_shao_tan_1/OSKAR/IDOS/test/OSKAR_CASA/daliuge/aa4.tm'
+
+    lg = json.load(open('/BIGDATA1/ac_shao_tan_1/OSKAR/IDOS/test/OSKAR_CASA/daliuge/lg/oskar_casa_img.json'))
+    
+    for jd in lg['nodeDataArray']:
+        if (jd['text'] == 'Scatter by Channel'):
+           for kw in ['num_of_copies', 'num_of_splits']:
+               if kw in jd:
+                  num_chan = int(jd[kw])
 
     freq_start = 100000000.0
     freq_stop = 400000000.0
-    freq_c = numpy.linspace(freq_start, freq_stop, 64)
+    freq_c = numpy.linspace(freq_start, freq_stop, num_chan)
     id_f = ini_file.split('_')
     freq_id = int(id_f[len(id_f)-1])
     freq = freq_c[freq_id]
@@ -43,7 +52,7 @@ if __name__ == '__main__':
     config = ConfigParser.RawConfigParser()
     #General
     config.add_section('General')
-    config.set('General', 'app', '/BIGDATA/ac_shao_tan_1/OSKAR/OSKAR-2.7/bin/oskar_sim_interferometer')
+    config.set('General', 'app', '/BIGDATA1/ac_shao_tan_1/OSKAR/OSKAR-2.7/bin/oskar_sim_interferometer')
     config.set('General', 'version', '2.7.0')
     #interferometer
     config.add_section('interferometer')
