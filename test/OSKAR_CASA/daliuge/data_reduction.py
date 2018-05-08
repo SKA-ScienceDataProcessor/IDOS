@@ -23,7 +23,7 @@ def casa_imaging(ms_file, Nfacet, NID):
     casa.run_script(["Nfacet={}".format(Nfacet)])
     casa.run_script(["NID={}".format(NID)])
 
-    casa.run_script_from_file('/BIGDATA/ac_shao_tan_1/OSKAR//IDOS/test/OSKAR_CASA/daliuge/image.py',timeout = 6000000)
+    casa.run_script_from_file('/BIGDATA1/ac_shao_tan_1/OSKAR//IDOS/test/OSKAR_CASA/daliuge/image.py',timeout = 6000000)
 
 
 if __name__ == "__main__":
@@ -39,7 +39,7 @@ if __name__ == "__main__":
     scatter_uid = args.drop_uid.split('/')
     scatter_id = scatter_uid[len(scatter_uid)-1] 
 
-    lg = json.load(open('/BIGDATA/ac_shao_tan_1/OSKAR/IDOS/test/OSKAR_CASA/daliuge/lg/oskar_casa_img.json'))
+    lg = json.load(open('/BIGDATA1/ac_shao_tan_1/OSKAR/IDOS/test/OSKAR_CASA/daliuge/lg/oskar_casa_img.json'))
     for jd in lg['nodeDataArray']:
         if (jd['text'] == 'Scatter by Facet'):
            for kw in ['num_of_copies', 'num_of_splits']:
