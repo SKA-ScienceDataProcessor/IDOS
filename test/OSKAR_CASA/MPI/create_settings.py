@@ -23,17 +23,21 @@ if __name__ == '__main__':
  
     parser.add_argument('--outputini', dest='output_ini', type=str, default='./config/1_0', help='output ini file name')
 
+    parser.add_argument('--ranksize', dest='rank_size', type=int, default=1, help='CPUs szie')
+
     args = parser.parse_args()
 
     ini_file = args.output_ini
     ms_file = "%s.ms" % ini_file
 
     sky_model = './sky_Cen_A_si.osm'
-    tele_input_dir = './ska1_low.tm'
+    tele_input_dir = './aa4.tm'
+
+    num_cpus = int(args.rank_size)
 
     freq_start = 100000000.0
     freq_stop = 400000000.0
-    freq_c = numpy.linspace(freq_start, freq_stop, 64)
+    freq_c = numpy.linspace(freq_start, freq_stop, num_cpus)
     id_f = ini_file.split('_')
     freq_id = int(id_f[len(id_f)-1])
     freq = freq_c[freq_id]
@@ -50,9 +54,9 @@ if __name__ == '__main__':
     config.set('interferometer', 'time_average_sec', '0.0')
     #observation
     config.add_section('observation')    
-    config.set('observation', 'length', '1.0')
+    config.set('observation', 'length', '100.0')
     config.set('observation', 'num_channels', '1')
-    config.set('observation', 'num_time_steps', '10')
+    config.set('observation', 'num_time_steps', '100')
     config.set('observation', 'phase_centre_dec_deg', '-43.02')
     config.set('observation', 'phase_centre_ra_deg', '201.36')
     config.set('observation', 'start_frequency_hz', str(freq))

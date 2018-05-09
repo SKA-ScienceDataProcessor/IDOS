@@ -9,7 +9,7 @@ import time
 from os.path import join
 import json
 import sys
-sys.path.append("/BIGDATA/ac_shao_tan_1/OSKAR/OSKAR_CASA/no_daliuge_new")
+sys.path.append("/BIGDATA1/ac_shao_tan_1/OSKAR/IDOS/test/OSKAR_CASA/MPI")
 import argparse
 
 def fov_to_cellsize(fov, im_size):
@@ -119,7 +119,7 @@ if __name__ == "__main__":
                                                                   column))
     t0 = time.time()
     casa_image(ms, '{}'.format(root_name), column,
-                    [512,512], [4,4],
+                    [512,512], [3,4],
                     201.36, -43.02,
                     "uniform", Nfacet, NID, 0)
     print ('*' * 80)

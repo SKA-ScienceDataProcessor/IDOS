@@ -23,7 +23,7 @@ def casa_imaging(ms_file, Nfacet, NID):
     casa.run_script(["Nfacet={}".format(Nfacet)])
     casa.run_script(["NID={}".format(NID)])
 
-    casa.run_script_from_file('/BIGDATA/ac_shao_tan_1/OSKAR/OSKAR_CASA/no_daliuge_new/image.py',timeout = 6000000)
+    casa.run_script_from_file('/BIGDATA1/ac_shao_tan_1/OSKAR/IDOS/test/OSKAR_CASA/MPI/image.py',timeout = 6000000)
 
 
 if __name__ == "__main__":
