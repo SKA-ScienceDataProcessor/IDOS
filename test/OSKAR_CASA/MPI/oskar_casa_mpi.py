@@ -16,4 +16,5 @@ if __name__ == '__main__':
     os.system('python /BIGDATA1/ac_shao_tan_1/OSKAR/IDOS/test/OSKAR_CASA/MPI/data_reduction.py --msfile /BIGDATA1/ac_shao_tan_1/OSKAR/IDOS/test/OSKAR_CASA/MPI/config/1_%s.ms' % rank_str) 
     time_stop = time.time()
     use_time = time_stop-time_start
+    MPI.COMM_WORLD.barrier()
     print "use time: %.3f" % use_time
