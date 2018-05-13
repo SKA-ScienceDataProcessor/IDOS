@@ -39,7 +39,7 @@ if __name__ == "__main__":
     #sky model 
     sky_model = args.sky_model
     #number of time steps 
-    num_time_steps = [21600] # 6 h
+    num_time_steps = [21600] # 2 min 
 
     ini_file = args.ini_file
 
@@ -49,8 +49,9 @@ if __name__ == "__main__":
 
     for n in num_time_steps:
        #create a new conf file
-       ms_file = "./data/%sn%s.ms" % (args.tele_mode,n) 
-       vis_file = "./data/%sn%s.vis" % (args.tele_mode,n)
+       tele_name = args.tele_mode.split('/')[-1]
+       ms_file = "./data/%sn%s.ms" % (tele_name,n) 
+       vis_file = "./data/%sn%s.vis" % (tele_name,n)
        config.set('interferometer', 'ms_filename', ms_file)
        config.set('interferometer', 'oskar_vis_filename', vis_file)
        config.set('observation', 'num_time_steps', str(n)) 
