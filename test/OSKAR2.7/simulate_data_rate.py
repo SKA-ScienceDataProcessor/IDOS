@@ -39,7 +39,7 @@ if __name__ == "__main__":
     #sky model 
     sky_model = args.sky_model
     #number of time steps 
-    num_time_steps = [21600] # 2 min 
+    num_time_steps = [7200] # 2 h 
 
     ini_file = args.ini_file
 
