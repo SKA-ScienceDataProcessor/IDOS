@@ -10,6 +10,7 @@ import numpy
 import math
 import shutil
 import time
+import multiprocessing
 
 
 #Define a function for the thread
@@ -23,7 +24,7 @@ def casa_imaging(ms_file, Nfacet, NID):
     casa.run_script(["Nfacet={}".format(Nfacet)])
     casa.run_script(["NID={}".format(NID)])
 
-    casa.run_script_from_file('/BIGDATA1/ac_shao_tan_1/OSKAR/IDOS/test/OSKAR_CASA/MPI/image.py',timeout = 6000000)
+    casa.run_script_from_file('/BIGDATA1/ac_shao_tan_1/OSKAR/IDOS/test/OSKAR_CASA/MPI/image.py',timeout = 60000000)
 
 
 if __name__ == "__main__":
@@ -40,13 +41,15 @@ if __name__ == "__main__":
   
     ms_file = args.ms_file
 
-    t0=Thread(target=casa_imaging(ms_file, Nfacet, 0))
-    t1=Thread(target=casa_imaging(ms_file, Nfacet, 1))
-    t2=Thread(target=casa_imaging(ms_file, Nfacet, 2))
-    t3=Thread(target=casa_imaging(ms_file, Nfacet, 3))
+    jobs = []
+    for i in range(0, Nfacet):
+        process = multiprocessing.Process(target=casa_imaging,args=(ms_file, Nfacet, i))
+	jobs.append(process) 
+ 
+    # Start the processes  
+    for j in jobs:
+	j.start()
 
-    t0.start()
-    t1.start()
-    t2.start()
-    t3.start() 
-   
+    # Ensure all of the processes have finished
+    for j in jobs:
+	j.join() 
