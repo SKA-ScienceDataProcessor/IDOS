@@ -14,6 +14,7 @@ import time
 from spead_send import _get_receiver_host
 
 MB = 1024 ** 2
+SPLITER = '+'
 
 #spead2_send --buffer 11000000 --packet 8950 192.168.120.101 5001 --heaps 5000 --tcp
 spead_cmd = '%s --buffer %d --packet %d %s %d --heaps %d --tcp'
@@ -38,8 +39,8 @@ def parse_args():
 if __name__ == '__main__':
     args = parse_args()
     hoststr = _get_receiver_host()
-    if (hoststr.find(':') > -1):
-        d = hoststr.split(':')
+    if (hoststr.find(SPLITER) > -1):
+        d = hoststr.split(SPLITER)
         host = d[0]
         port = int(d[1])
     else:
