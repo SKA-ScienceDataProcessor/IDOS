@@ -39,8 +39,8 @@ def parse_args():
 if __name__ == '__main__':
     args = parse_args()
     hoststr = _get_receiver_host()
-    if (hoststr.find(SPLITER) > -1):
-        d = hoststr.split(SPLITER)
+    if (len(hoststr.split()) > 1):
+        d = hoststr.split()
         host = d[0]
         port = int(d[1])
     else:
