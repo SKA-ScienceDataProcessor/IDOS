@@ -47,13 +47,13 @@ if __name__ == '__main__':
         raise Exception("Invalid host string received: %s" % hoststr)
 
     cmd = spead_cmd % (args.path, MB * args.buffer, args.packet, host, port, args.heaps)
-
+    print(cmd)
     start = time.time()
     # Run and wait until it finishes
-    process = subprocess.Popen(cmd,
+    process = subprocess.Popen(cmd.split(),
                                close_fds=True,
-                               stdin=stdin,
-                               stdout=stdout,
+                               #stdin=stdin,
+                               #stdout=stdout,
                                stderr=subprocess.PIPE,
                                env=os.environ.copy())
 
