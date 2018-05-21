@@ -59,8 +59,8 @@ if __name__ == '__main__':
 
     print('Waiting for this to complete: %s' % cmd)
     pstdout, pstderr = process.communicate()
-    if stdout != subprocess.PIPE:
-        pstdout = b"<piped-out>"
+    #if stdout != subprocess.PIPE:
+    #    pstdout = b"<piped-out>"
     pcode = process.returncode
     end = time.time()
 
