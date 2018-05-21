@@ -1,0 +1,276 @@
+{
+  "class": "go.GraphLinksModel",
+  "linkFromPortIdProperty": "fromPort",
+  "linkToPortIdProperty": "toPort",
+  "nodeDataArray": [
+    {
+      "category": "BashShellApp",
+      "text": "Generate ini File",
+      "execution_time": 50,
+      "num_cpus": 1,
+      "group_start": 0,
+      "Arg01": "python /BIGDATA1/ac_shao_tan_1/OSKAR/IDOS/test/OSKAR_CASA/daliuge/create_settings.py",
+      "Arg02": "--outputini %o[-7]",
+      "Arg03": "--dropuid ",
+      "Arg04": "",
+      "Arg05": "",
+      "Arg06": "",
+      "Arg07": "",
+      "Arg08": "",
+      "Arg09": "",
+      "Arg10": "",
+      "key": -4,
+      "loc": "-237.99999999999994 -474.0000000000004",
+      "group": -12
+    },
+    {
+      "category": "file",
+      "text": "ini File",
+      "data_volume": 5,
+      "group_end": 0,
+      "check_filepath_exists": "0",
+      "filepath": "",
+      "dirname": "/BIGDATA1/ac_shao_tan_1/OSKAR/IDOS/test/OSKAR_CASA/daliuge/config",
+      "key": -7,
+      "loc": "-118.00000000000006 -474.00000000000006",
+      "group": -12
+    },
+    {
+      "category": "BashShellApp",
+      "text": "OSKAR2.7 Interferometer Simulation",
+      "execution_time": 100,
+      "num_cpus": 1,
+      "group_start": 0,
+      "Arg01": "python /BIGDATA1/ac_shao_tan_1/OSKAR/IDOS/test/OSKAR_CASA/daliuge/run_interferometer.py",
+      "Arg02": "--inifile %i[-7]",
+      "Arg03": "--outputmsfile %o[-6]",
+      "Arg04": "--dropuid ",
+      "Arg05": "",
+      "Arg06": "",
+      "Arg07": "",
+      "Arg08": "",
+      "Arg09": "",
+      "Arg10": "",
+      "key": -5,
+      "loc": "7.0000000000000355 -474.0000000000001",
+      "group": -12
+    },
+    {
+      "category": "file",
+      "text": "MS File",
+      "data_volume": 5,
+      "group_end": 0,
+      "check_filepath_exists": "0",
+      "filepath": "",
+      "dirname": "/BIGDATA1/ac_shao_tan_1/OSKAR/IDOS/test/OSKAR_CASA/daliuge/config",
+      "key": -6,
+      "loc": "125.0000000000002 -474.0000000000001",
+      "group": -12
+    },
+    {
+      "category": "BashShellApp",
+      "text": "Data Reduction",
+      "execution_time": 100,
+      "num_cpus": 1,
+      "group_start": 0,
+      "Arg01": "python /BIGDATA1/ac_shao_tan_1/OSKAR/IDOS/test/OSKAR_CASA/daliuge/data_reduction.py",
+      "Arg02": "--msfile %i[-6].MS",
+      "Arg03": "--dropuid ",
+      "Arg04": "",
+      "Arg05": "",
+      "Arg06": "",
+      "Arg07": "",
+      "Arg08": "",
+      "Arg09": "",
+      "Arg10": "",
+      "key": -8,
+      "loc": "244.0000000000004 -473.9999999999996",
+      "group": -10
+    },
+    {
+      "category": "file",
+      "text": "Fits image",
+      "data_volume": 5,
+      "group_end": 0,
+      "check_filepath_exists": "0",
+      "filepath": "",
+      "dirname": "/BIGDATA1/ac_shao_tan_1/OSKAR/IDOS/test/OSKAR_CASA/daliuge/config",
+      "key": -9,
+      "loc": "244.00000000000014 -403.9999999999995",
+      "group": -10
+    },
+    {
+      "category": "SplitData",
+      "text": "Scatter by Channel",
+      "isGroup": true,
+      "num_of_copies": 1,
+      "scatter_axis": "time",
+      "key": -12,
+      "loc": "16.356201171875227 -451.1401682547849"
+    },
+    {
+      "category": "SplitData",
+      "text": "Scatter by Facet",
+      "isGroup": true,
+      "num_of_copies": 4,
+      "scatter_axis": "time",
+      "key": -10,
+      "loc": "244.0000000000004 -435.11404520790984",
+      "group": -12
+    },
+    {
+      "category": "Start",
+      "text": "Start",
+      "key": -1,
+      "loc": "-223 -618"
+    },
+    {
+      "category": "End",
+      "text": "End",
+      "key": -2,
+      "loc": "389 -400"
+    }
+  ],
+  "linkDataArray": [
+    {
+      "from": -4,
+      "to": -7,
+      "fromPort": "R",
+      "toPort": "L",
+      "points": [
+        -174.238576250846,
+        -474.0000000000002,
+        -164.238576250846,
+        -474.0000000000002,
+        -161.869288125423,
+        -474.0000000000002,
+        -161.869288125423,
+        -474.00000000000034,
+        -159.5,
+        -474.00000000000034,
+        -149.5,
+        -474.00000000000034
+      ]
+    },
+    {
+      "from": -7,
+      "to": -5,
+      "fromPort": "R",
+      "toPort": "L",
+      "points": [
+        -86.5,
+        -474.0000000000003,
+        -76.5,
+        -474.0000000000003,
+        -68.13071187457697,
+        -474.0000000000003,
+        -68.13071187457697,
+        -474.0000000000001,
+        -59.761423749153934,
+        -474.0000000000001,
+        -49.761423749153934,
+        -474.0000000000001
+      ]
+    },
+    {
+      "from": -5,
+      "to": -6,
+      "fromPort": "R",
+      "toPort": "L",
+      "points": [
+        63.761423749154005,
+        -474.0000000000001,
+        73.761423749154,
+        -474.0000000000001,
+        77.38071187457707,
+        -474.0000000000001,
+        77.38071187457707,
+        -474,
+        81.00000000000014,
+        -474,
+        91.00000000000014,
+        -474
+      ]
+    },
+    {
+      "from": -6,
+      "to": -8,
+      "fromPort": "R",
+      "toPort": "L",
+      "points": [
+        159.00000000000014,
+        -474,
+        169.00000000000014,
+        -474,
+        170.86928812542325,
+        -474,
+        170.86928812542325,
+        -473.9999999999998,
+        172.73857625084636,
+        -473.9999999999998,
+        182.73857625084636,
+        -473.9999999999998
+      ]
+    },
+    {
+      "from": -8,
+      "to": -9,
+      "fromPort": "B",
+      "toPort": "T",
+      "points": [
+        244.00000000000003,
+        -454.93857625084604,
+        244.00000000000003,
+        -444.93857625084604,
+        244.00000000000003,
+        -442.8859547920897,
+        244,
+        -442.8859547920897,
+        244,
+        -440.8333333333333,
+        244,
+        -430.8333333333333
+      ]
+    },
+    {
+      "from": -1,
+      "to": -4,
+      "fromPort": "B",
+      "toPort": "T",
+      "points": [
+        -223,
+        -598,
+        -223,
+        -588,
+        -223,
+        -588,
+        -238.00000000000003,
+        -588,
+        -238.00000000000003,
+        -503.0614237491543,
+        -238.00000000000003,
+        -493.0614237491543
+      ]
+    },
+    {
+      "from": -9,
+      "to": -2,
+      "fromPort": "R",
+      "toPort": "L",
+      "points": [
+        288.5000000000002,
+        -403.9999999999998,
+        298.5000000000002,
+        -403.9999999999998,
+        325.5370370370372,
+        -403.9999999999998,
+        325.5370370370372,
+        -400,
+        352.5740740740741,
+        -400,
+        362.5740740740741,
+        -400
+      ]
+    }
+  ]
+}
