@@ -1,0 +1,13 @@
+{ "class": "go.GraphLinksModel",
+  "nodeDataArray": [ 
+{"category":"file", "text":"CRC Result", "data_volume":5, "group_end":0, "check_filepath_exists":"1", "filepath":"", "dirname":"/flush1/wu082/jacal_data/", "key":-6, "loc":"-456.9999999999995 -761.3333282470705", "group":-12},
+{"category":"SplitData", "text":"Scatter", "isGroup":true, "num_of_copies":2, "scatter_axis":"time", "key":-12, "loc":"-456.3773689270017 -885.8229515075685"},
+{"category":"Component", "text":"Spead TCP\nReceiver", "execution_time":5, "num_cpus":1, "group_start":0, "appclass":"jacal.apps.SpeadTcpReceiver", "Arg01":"", "Arg02":"", "Arg03":"", "Arg04":"", "Arg05":"", "Arg06":"", "Arg07":"", "Arg08":"", "Arg09":"", "Arg10":"", "key":-3, "loc":"-453.32812500000006 -1013", "group":-12},
+{"category":"Component", "text":"PassBy ", "execution_time":5, "num_cpus":1, "group_start":0, "appclass":"jacal.apps.PassbyStreamApp", "Arg01":"", "Arg02":"", "Arg03":"", "Arg04":"", "Arg05":"", "Arg06":"", "Arg07":"", "Arg08":"", "Arg09":"", "Arg10":"", "key":-4, "loc":"-457.328125 -918", "group":-12},
+{"category":"Component", "text":"CRC", "execution_time":5, "num_cpus":1, "group_start":0, "appclass":"dlg.apps.crc.CRCStreamApp", "Arg01":"", "Arg02":"", "Arg03":"", "Arg04":"", "Arg05":"", "Arg06":"", "Arg07":"", "Arg08":"", "Arg09":"", "Arg10":"", "key":-5, "loc":"-454.328125 -840", "group":-12}
+ ],
+  "linkDataArray": [ 
+{"from":-3, "to":-4, "points":[-453.32812500000006,-988.6245513916016,-453.32812500000006,-978.6245513916016,-453.32812500000006,-961.5311378479005,-457.328125,-961.5311378479005,-457.328125,-944.4377243041993,-457.328125,-934.4377243041993]},
+{"from":-4, "to":-5, "points":[-457.328125,-901.5622756958008,-457.328125,-891.5622756958008,-457.328125,-879,-454.328125,-879,-454.328125,-866.4377243041993,-454.328125,-856.4377243041993]},
+{"from":-5, "to":-6, "points":[-454.328125,-823.5622756958008,-454.328125,-813.5622756958008,-454.328125,-805.9792388916017,-456.9999999999995,-805.9792388916017,-456.9999999999995,-798.3962020874026,-456.9999999999995,-788.3962020874026]}
+ ]}
