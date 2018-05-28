@@ -39,7 +39,7 @@ if __name__ == "__main__":
     #sky model 
     sky_model = args.sky_model
     #number of time steps 
-    num_time_steps = [7200] # 2 h 
+    num_time_steps = [120] # 2 minutes 
 
     ini_file = args.ini_file
 
@@ -55,8 +55,8 @@ if __name__ == "__main__":
        config.set('interferometer', 'ms_filename', ms_file)
        config.set('interferometer', 'oskar_vis_filename', vis_file)
        config.set('observation', 'num_time_steps', str(n)) 
-       integration_time = 1 #unit:seconds
-       obs_length = n/integration_time
+       integration_time = 0.9 #unit:seconds
+       obs_length = float(n/integration_time)
        config.set('observation', 'length', str(obs_length))
        config.set('sky', 'oskar_sky_model\\file', sky_model)
        config.set('telescope', 'input_directory', args.tele_mode)
