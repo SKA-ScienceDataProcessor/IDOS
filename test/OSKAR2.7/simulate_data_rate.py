@@ -44,7 +44,7 @@ if __name__ == "__main__":
     integration_time = 0.9 #unit:seconds
     #number of time steps
     num_time_steps = int(obs_length/integration_time)
-    num_time_steps = list(num_time_steps)
+    num_time_steps = [num_time_steps]
 
     ini_file = args.ini_file
 
