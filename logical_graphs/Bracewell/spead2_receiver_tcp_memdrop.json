@@ -1,0 +1,11 @@
+{ "class": "go.GraphLinksModel",
+  "nodeDataArray": [ 
+{"category":"SplitData", "text":"Scatter", "isGroup":true, "num_of_copies":2, "scatter_axis":"time", "key":-12, "loc":"-452.328125 -923"},
+{"category":"Component", "text":"Spead TCP\nReceiver", "execution_time":5, "num_cpus":1, "group_start":0, "appclass":"jacal.apps.SpeadTcpReceiver", "Arg01":"", "Arg02":"", "Arg03":"", "Arg04":"", "Arg05":"", "Arg06":"", "Arg07":"", "Arg08":"", "Arg09":"", "Arg10":"", "key":-3, "loc":"-453.32812500000006 -1013", "group":-12},
+{"category":"Component", "text":"PassBy ", "execution_time":5, "num_cpus":1, "group_start":0, "appclass":"jacal.apps.PassbyStreamApp", "Arg01":"", "Arg02":"", "Arg03":"", "Arg04":"", "Arg05":"", "Arg06":"", "Arg07":"", "Arg08":"", "Arg09":"", "Arg10":"", "key":-4, "loc":"-457.328125 -918", "group":-12},
+{"category":"memory", "text":"InMemory\nDrop", "data_volume":5, "group_end":0, "key":-6, "loc":"-452.328125 -833", "group":-12}
+ ],
+  "linkDataArray": [ 
+{"from":-3, "to":-4, "points":[-453.32812500000006,-988.6245513916016,-453.32812500000006,-978.6245513916016,-453.32812500000006,-961.5311378479005,-457.328125,-961.5311378479005,-457.328125,-944.4377243041993,-457.328125,-934.4377243041993]},
+{"from":-4, "to":-6, "points":[-457.328125,-901.5622756958008,-457.328125,-891.5622756958008,-457.328125,-879.4688621520996,-452.328125,-879.4688621520996,-452.328125,-867.3754486083984,-452.328125,-857.3754486083984]}
+ ]}
