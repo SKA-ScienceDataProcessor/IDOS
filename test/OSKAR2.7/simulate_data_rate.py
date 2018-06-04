@@ -38,8 +38,13 @@ if __name__ == "__main__":
     args = parse_args()
     #sky model 
     sky_model = args.sky_model
-    #number of time steps 
-    num_time_steps = [120] # 2 minutes 
+    #Total observation time
+    obs_length = 120.0 # 2 minutes
+    
+    integration_time = 0.9 #unit:seconds
+    #number of time steps
+    num_time_steps = int(obs_length/integration_time)
+    num_time_steps = [num_time_steps]
 
     ini_file = args.ini_file
 
@@ -52,14 +57,16 @@ if __name__ == "__main__":
        tele_name = args.tele_mode.split('/')[-1]
        ms_file = "./data/%sn%s.ms" % (tele_name,n) 
        vis_file = "./data/%sn%s.vis" % (tele_name,n)
+
        config.set('interferometer', 'ms_filename', ms_file)
        config.set('interferometer', 'oskar_vis_filename', vis_file)
+        
        config.set('observation', 'num_time_steps', str(n)) 
-       integration_time = 0.9 #unit:seconds
-       obs_length = float(n/integration_time)
        config.set('observation', 'length', str(obs_length))
+        
        config.set('sky', 'oskar_sky_model\\file', sky_model)
        config.set('telescope', 'input_directory', args.tele_mode)
+        
        with open(ini_file, 'w+') as configfile:
             config.write(EqualsSpaceRemover(configfile))
        
