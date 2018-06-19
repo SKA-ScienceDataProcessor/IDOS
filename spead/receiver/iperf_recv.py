@@ -42,7 +42,7 @@ if __name__ == '__main__':
     con = httplib.HTTPConnection('sdp-dfms.ddns.net', 8096)
     con.request('GET', '/reg_receiver?ip=%s' % (ipstr))
 
-    cmd = '%s -s -p %d' % (iperf_bin, port)
+    cmd = '%s -s -p %d -w 512K' % (iperf_bin, port)
     # Run and wait until it finishes
     process = subprocess.Popen(cmd.split(),
                                close_fds=True,
