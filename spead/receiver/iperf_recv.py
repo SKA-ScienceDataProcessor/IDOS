@@ -31,6 +31,8 @@ from mpi4py import MPI
 
 import six.moves.http_client as httplib
 
+iperf_bin = '/home/wu082/downloads/iperf-2.0.11/src/iperf'
+
 if __name__ == '__main__':
     comm = MPI.COMM_WORLD
     rank = comm.Get_rank()
@@ -40,7 +42,7 @@ if __name__ == '__main__':
     con = httplib.HTTPConnection('sdp-dfms.ddns.net', 8096)
     con.request('GET', '/reg_receiver?ip=%s' % (ipstr))
 
-    cmd = 'iperf3 -s -p %d' % port
+    cmd = '%s -s -p %d' % (iperf_bin, port)
     # Run and wait until it finishes
     process = subprocess.Popen(cmd.split(),
                                close_fds=True,
