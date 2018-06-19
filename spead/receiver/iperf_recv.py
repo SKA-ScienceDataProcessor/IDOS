@@ -25,6 +25,7 @@
 #    MA 02111-1307  USA
 
 import dlg
+import os
 import subprocess
 from mpi4py import MPI
 
