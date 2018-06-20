@@ -20,6 +20,8 @@ GRAPH_DIR="/home/wu082/proj/IDOS/logical_graphs/Bracewell/spead2_sender.json"
 #GRAPH_DIR="/home/wu082/proj/IDOS/logical_graphs/Bracewell/jacal-ingest.json"
 CLUSTER="Bracewell"
 source /flush1/tob020/venvs/jacal/bin/activate
+#source /flush1/tob020/venvs/jacal3/bin/activate
 DLG_MON_HOST="sdp-dfms.ddns.net"
 DLG_MON_PORT="8081"
 mpirun -np 7  python -m dlg.deploy.pawsey.start_dfms_cluster -l $LOG_DIR -L $GRAPH_DIR -c $CLUSTER -v 3 -m $DLG_MON_HOST -o $DLG_MON_PORT
+#mpirun -np 2  python -m dlg.deploy.pawsey.start_dfms_cluster -l $LOG_DIR -L $GRAPH_DIR -c $CLUSTER -v 3 

@@ -7,10 +7,8 @@
 #SBATCH --job-name=Sender
 
 export MODULEPATH=$MODULEPATH:/flush1/tob020/modulefiles
-module load oskar
-module load cuda openmpi boost
-
+module load openmpi
 
 source /flush1/tob020/venvs/jacal/bin/activate
-mpirun -np 2 python /home/wu082/proj/IDOS/spead/sender/spead_sender_tcp.py
+mpirun -np 2 python /home/wu082/proj/IDOS/spead/receiver/iperf_recv.py
 
