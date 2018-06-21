@@ -9,7 +9,7 @@ import time
 from os.path import join
 import json
 import sys
-sys.path.append("/BIGDATA1/ac_shao_tan_1/OSKAR/OSKAR_CASA/no_daliuge_new")
+sys.path.append("/BIGDATA1/ac_shao_tan_1/OSKAR/IDOS/test/OSKAR_CASA/daliuge")
 import argparse
 
 def fov_to_cellsize(fov, im_size):
