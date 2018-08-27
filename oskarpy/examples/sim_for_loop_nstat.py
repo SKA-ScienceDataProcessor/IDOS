@@ -15,6 +15,7 @@ if __name__ == '__main__':
   output_root = 'test_via_memory'
 
   ncross = 5 ## No of sources per leg of cross 
+  print('There will be %d sources in the sky model'%(ncross*4+1))
   # Define a telescope layout.
   for num_stations in range(50,300,30):
     numpy.random.seed(1)
