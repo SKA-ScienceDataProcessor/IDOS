@@ -11,8 +11,10 @@ if __name__ == '__main__':
   precision = 'single'
   phase_centre_ra_deg = 0.0
   phase_centre_dec_deg = 60.0
+  phase_centre_step_deg = 1.0
   output_root = 'test_via_memory'
 
+  ncross = 5 ## No of sources per leg of cross 
   # Define a telescope layout.
   for num_stations in range(50,300,30):
     numpy.random.seed(1)
@@ -22,12 +24,19 @@ if __name__ == '__main__':
     # Set up the sky model.
     sky = oskar.Sky.generate_grid(phase_centre_ra_deg, phase_centre_dec_deg,
                                   16, 1.5, precision=precision)
-    sky.append_sources(phase_centre_ra_deg, phase_centre_dec_deg, 1.0)
+    nY=0
+    for nX in range(ncross*2+1):
+      sky.append_sources(phase_centre_ra_deg+(ncross-nX)*phase_centre_step_deg, phase_centre_dec_deg+(ncross-nY)*phase_centre_step_deg, 1.0)
+    nX=0
+    for nY in range(ncross*2+1):
+      if (nY!=ncross):
+	sky.append_sources(phase_centre_ra_deg+(ncross-nX)*phase_centre_step_deg, phase_centre_dec_deg+(ncross-nY)*phase_centre_step_deg, 1.0)
 
     # Set up the telescope model.
+    t_average=10.0
     tel = oskar.Telescope(precision)
     tel.set_channel_bandwidth(1.0e3)
-    tel.set_time_average(10.0)
+    tel.set_time_average(t_average)
     tel.set_pol_mode('Scalar')
     tel.set_station_coords_enu(longitude_deg=0, latitude_deg=60, altitude_m=0,
                                x=x, y=y)
@@ -55,7 +64,7 @@ if __name__ == '__main__':
     for ninc in range(1,10):
         nts=48*ninc
         simulator.set_observation_time(
-                                   start_time_mjd_utc=51545.0, length_sec=43200.0, num_time_steps=nts)
+                                   start_time_mjd_utc=51545.0, length_sec=t_average*num_time_steps, num_time_steps=nts)
         start = time.time()
         print('Simulating and imaging for %d antennas and %d time steps'%(num_stations,nts))
         imager_data = simulator.run(return_images=1, return_grids=1)
