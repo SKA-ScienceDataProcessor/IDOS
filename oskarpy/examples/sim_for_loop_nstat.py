@@ -65,7 +65,7 @@ if __name__ == '__main__':
     for ninc in range(1,10):
         nts=48*ninc
         simulator.set_observation_time(
-                                   start_time_mjd_utc=51545.0, length_sec=t_average*num_time_steps, num_time_steps=nts)
+                                   start_time_mjd_utc=51545.0, length_sec=t_average*nts, num_time_steps=nts)
         start = time.time()
         print('Simulating and imaging for %d antennas and %d time steps'%(num_stations,nts))
         imager_data = simulator.run(return_images=1, return_grids=1)
