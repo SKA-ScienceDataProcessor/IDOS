@@ -1,4 +1,4 @@
-The EOR models are makde from the EOS 12cmFAST simulations, using the
+The EOR models are makde from the EOS 21cmFAST simulations, using the
 recommended faint galaxies model, processed with prep_box.py.
 prep_box.py averages the 1024x1024x1024 image predictions to smaller
 16x128x128 cubes, which steps in ~0.2MHz increments over a 16Mpc sky.
@@ -24,4 +24,14 @@ nominal frequency will generate nonsense. One could set the SI to zero in this
 case.
 
 The models are gaussians of width of the 128pixels over 12 deg. Which is
-close to 1 arcmin.
+c1lose to 1 arcmin.
+
+To select the model suitable for your simulation I would find the first model which is suitable for a frequency greater than your start frequency. 
+
+eg:
+ model_list=glob.glob('EOR+Forground/sky_eor_model_f*.osm')
+ model_list.sort()
+ frq=np.zeros((len(model_list)))
+ for n in range(len(model_list)):
+    frq[n]=model_list[n][30:36]
+ use_model=model_list[np.where(frq>start_freq)[0][0]]
