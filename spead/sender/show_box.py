@@ -1,7 +1,8 @@
-import glob
+import glob,os
 import numpy as np
 import matplotlib.pylab as pl
 pl.ion()
+show_plots=False
 
 N1=16;N2=128;N3=N2
 
@@ -24,7 +25,8 @@ for f in fl:
        si=a*0
        First=False
       else:
-       si=np.log(a/b)/np.log(fq[-1]/fq[-2])
+       df=(fq[-2]-fq[-1])/N1
+       si=np.log(a/b)/np.log(fq[-1]/(df+fq[-1]))
       b=a.copy()      
       for n in range(N1):
         ball.append(a[n])
@@ -54,6 +56,7 @@ for n1 in range(len(fq)):
    else:
        pl.savefig('sky_eor_model_f%06.2f.png'%(fq[n1]))
 
+crval=[201,-44];crdel=[6.0/N2,6.0/N3] # reference values in deg
 corn_markers=[]
 print '##'
 print '##  RA,    Dec,   I,    Q,    U,    V,   freq0, spix,  RM,      maj,      min,      pa'
@@ -73,7 +76,6 @@ if (os.path.isfile(f)):
 
 std_dev=np.std(ball,axis=(1,2))*0
 n=ball.shape
-crval=[201,-44];crdel=[6.0/N2,6.0/N3] # reference values in deg
 if (show_plots==False):
   for n1 in range(n[0]):
     print 'Freq Chan: '+str(fq[n1])
