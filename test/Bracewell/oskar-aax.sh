@@ -32,9 +32,8 @@ module load cuda casacore/2.0.3
 SCENARIO=${1:-"epa-6h"}
 
 # set to true to run or generate bits
-RUN_INTER="true"
 GENERATE_FITS="true"
-GENERATE_MS="false"
+GENERATE_MS="true"
 
 # constants across scenarios
 FOV_DEG=5
@@ -89,6 +88,7 @@ case "$SCENARIO" in
 	  SM_NAME="sky_Cen_A_si"
 	  POL_MODE="Full"
 	  IMG_SIZE=1024
+	  CHANNEL_SNAPSHOTS="false"
 	  ;;
   epa-6h | aa1-6h | aa2-6h | aa3-6h | aa4-6h)
 	  # 6 h workload paras
@@ -102,6 +102,7 @@ case "$SCENARIO" in
 	  SM_NAME="sky_Cen_A_si"
 	  POL_MODE="Full"
 	  IMG_SIZE=1024
+	  CHANNEL_SNAPSHOTS="false"
 	  ;;
   aa4-1c)
 	  # single channel workload paras
@@ -115,6 +116,7 @@ case "$SCENARIO" in
 	  SM_NAME="sky_Cen_A_si1000"
 	  POL_MODE="Scalar"
 	  IMG_SIZE=1024
+	  CHANNEL_SNAPSHOTS="false"
 	  ;;
   partition)
 	  # EoR sky model partitioning test case; it's a logical expansion of the single channel setup aa4-1c
@@ -123,12 +125,24 @@ case "$SCENARIO" in
 	  OBS_LENGTH="00:01:00"
 	  NUM_TIME_STEPS=60
 	  START_FREQUENCY_HZ=(209991850 210244750 210497950 210751700)
-	  NUM_CHANNELS=1
-	  FREQUENCY_INC_HZ=(252900 253200 253750 254000)
+	  # START_FREQUENCY_HZ=(99720820 99843640 99966625 100089900)
+	  # START_FREQUENCY_HZ=(119584150 119729250 119874500 120020100)
+	  NUM_CHANNELS=5
+	  FREQUENCY_INCs_HZ=(252900 253200 253750 254000)
+	  # FREQUENCY_INCs_HZ=(122820 122985 123275 123400)
+	  # FREQUENCY_INCs_HZ=(29020 29050 29120 29160)
+	  
+	  # calculate frequency increments of channels within each band; e.g. FREQUENCY_INC_HZ=(50580 50640 50750 50800)
+	  for idx in $(seq 0 $UPPERIDX)
+	  do
+		  let "FREQUENCY_INC_HZ[$idx] = ${FREQUENCY_INCs_HZ[$idx]} / $NUM_CHANNELS"
+	  done
+	  
 	  SM_NAME=$SCENARIO
 	  POL_MODE="Scalar"
-	  IMG_SIZE=1024
+	  IMG_SIZE=512
 	  FOV_DEG=6
+	  CHANNEL_SNAPSHOTS="true"
 	  ;;
   *)
 	  echo "unkown scenario - aborting"
@@ -150,6 +164,9 @@ case "$SM_NAME" in
 	  PHASE_CENTRE_DEC_DEG="-44"
 	  MAX_SOURCES_PER_CHUNK=50000
 	  SM_NAME=("sky_eor_model_f210.12" "sky_eor_model_f210.37" "sky_eor_model_f210.62" "sky_eor_model_f210.88")
+	  # SM_NAME=("sky_eor_model_f099.78" "sky_eor_model_f099.91" "sky_eor_model_f100.03" "sky_eor_model_f100.15")
+	  # SM_NAME=("sky_eor_model_f119.66" "sky_eor_model_f119.80" "sky_eor_model_f119.95" "sky_eor_model_f120.09")
+	  SKY_DIR=${SKY_DIR}/EOR
 	  SM_FILE=(${SKY_DIR}/${SM_NAME[0]}.osm ${SKY_DIR}/${SM_NAME[1]}.osm ${SKY_DIR}/${SM_NAME[2]}.osm ${SKY_DIR}/${SM_NAME[3]}.osm)
 	  ;;
   *)
@@ -161,92 +178,85 @@ case "$SM_NAME" in
 	  ;;
 esac
 
-if [ "${RUN_INTER}" = "true" ]
-then
-  cd $APP_ROOT
 
-  # patch OSKAR settings to tune workload
-  oskar_sim_interferometer --set $INTER_INI simulator/double_precision $DOUBLE_PRECISION
-  oskar_sim_interferometer --set $INTER_INI simulator/use_gpus $USE_GPUS
-  oskar_sim_interferometer --set $INTER_INI simulator/max_sources_per_chunk $MAX_SOURCES_PER_CHUNK
-
-  oskar_sim_interferometer --set $INTER_INI observation/phase_centre_ra_deg $PHASE_CENTRE_RA_DEG
-  oskar_sim_interferometer --set $INTER_INI observation/phase_centre_dec_deg $PHASE_CENTRE_DEC_DEG
-
-  oskar_sim_interferometer --set $INTER_INI observation/start_frequency_hz $START_FREQUENCY_HZ
-  oskar_sim_interferometer --set $INTER_INI observation/num_channels $NUM_CHANNELS
-  oskar_sim_interferometer --set $INTER_INI observation/frequency_inc_hz $FREQUENCY_INC_HZ
-
-  oskar_sim_interferometer --set $INTER_INI observation/start_time_utc "$START_TIME_UTC"
-  oskar_sim_interferometer --set $INTER_INI observation/length $OBS_LENGTH
-  oskar_sim_interferometer --set $INTER_INI observation/num_time_steps $NUM_TIME_STEPS
-
-  oskar_sim_interferometer --set $INTER_INI telescope/pol_mode $POL_MODE
-
-  oskar_sim_interferometer --set $INTER_INI sky/oskar_sky_model/file $SM_FILE
-  oskar_sim_interferometer --set $INTER_INI interferometer/oskar_vis_filename $VISNAME
-  oskar_sim_interferometer --set $INTER_INI interferometer/ms_filename $MS_FILENAME
-
-  # further tailoring in case of running parallel instances
-  if [ "${SCENARIO}" = "partition" ]
-  then
-	  for idx in $(seq 0 $UPPERIDX)
-	  do
-		  echo "device index: <${idx}>"
-		  
-		  # segregate input/output files etc. of each parallel OSKAR instance to be launched
-		  cp $INTER_INI "${INTER_INI}.${idx}"
-		  # let "DEVICE_ID = $idx - 1"
-		  oskar_sim_interferometer --set "${INTER_INI}.${idx}" simulator/cuda_device_ids $idx
-		  oskar_sim_interferometer --set "${INTER_INI}.${idx}" observation/start_frequency_hz ${START_FREQUENCY_HZ[$idx]}
-		  oskar_sim_interferometer --set "${INTER_INI}.${idx}" observation/frequency_inc_hz ${FREQUENCY_INC_HZ[$idx]}
-		  oskar_sim_interferometer --set "${INTER_INI}.${idx}" sky/oskar_sky_model/file ${SM_FILE[$idx]}
-		  if [ -n "$VISNAME" ]; then
-			  oskar_sim_interferometer --set "${INTER_INI}.${idx}" interferometer/oskar_vis_filename "${VISNAME}.${idx}"
-		  fi
-		  if [ -n "$MS_FILENAME" ]; then
-			  oskar_sim_interferometer --set "${INTER_INI}.${idx}" interferometer/ms_filename "${MS_FILENAME}.${idx}"
-		  fi
-		  
-		  # parallel execution of simulation, each on a single GPU of the same node
-		  oskar_sim_interferometer "${INTER_INI}.${idx}" &
-		  
-		  # TODO: cleanup of (temporary) settings files "${INTER_INI}.[0-3]"
-      done	  
-  else
-	  # execute simulation
-	  oskar_sim_interferometer $INTER_INI
-  fi
+if [ "${SCENARIO}" = "partition" ] ; then
+  uidx=$UPPERIDX
+else
+  uidx=0
 fi
 
-if [ "${GENERATE_FITS}" = "true" ]
-then
-  # generate FITS image for visual inspection with e.g. ds9
-  oskar_imager --set $IMAGER_INI image/double_precision $DOUBLE_PRECISION
-  oskar_imager --set $IMAGER_INI image/use_gpus $USE_GPUS
-  oskar_imager --set $IMAGER_INI image/fov_deg $FOV_DEG
-  oskar_imager --set $IMAGER_INI image/size $IMG_SIZE
-  
-  if [ "${SCENARIO}" = "partition" ]
-  then
-	  # TODO: proper sync with background simulation task; imager fails due to incomplete .vis if sleep is too short!
-	  sleep 60
-	  
-	  for idx in $(seq 0 $UPPERIDX)
-	  do
-		  oskar_imager --set $IMAGER_INI image/input_vis_data "${VISNAME}.${idx}"
-		  oskar_imager --set $IMAGER_INI image/root_path "$FITSROOT.${idx}"
+cd $APP_ROOT
+for idx in $(seq 0 $uidx) ; do
+	if [ "${USE_GPUS}" = "true" ] ; then
+		echo "CUDA device index: <${idx}>"
+	else
+		echo "running on CPU"
+	fi	
 		  
-		  # run
-		  oskar_imager $IMAGER_INI
-	  done
-  else
-	  oskar_imager --set $IMAGER_INI image/input_vis_data $VISNAME
-	  oskar_imager --set $IMAGER_INI image/root_path $FITSROOT
+	# copy template settings files and then customize the copies
+	cp $INTER_INI "${INTER_INI}.${idx}"
+	cp $IMAGER_INI "${IMAGER_INI}.${idx}"
+	
+    # patch OSKAR settings to tune workload to given scenario
+    oskar_sim_interferometer --set "${INTER_INI}.${idx}" simulator/double_precision $DOUBLE_PRECISION
+    oskar_sim_interferometer --set "${INTER_INI}.${idx}" simulator/use_gpus $USE_GPUS
+    oskar_sim_interferometer --set "${INTER_INI}.${idx}" simulator/max_sources_per_chunk $MAX_SOURCES_PER_CHUNK
 
-	  # run
-	  oskar_imager $IMAGER_INI
-  fi
-  
+    oskar_sim_interferometer --set "${INTER_INI}.${idx}" observation/phase_centre_ra_deg $PHASE_CENTRE_RA_DEG
+    oskar_sim_interferometer --set "${INTER_INI}.${idx}" observation/phase_centre_dec_deg $PHASE_CENTRE_DEC_DEG
+
+    oskar_sim_interferometer --set "${INTER_INI}.${idx}" observation/num_channels $NUM_CHANNELS
+
+    oskar_sim_interferometer --set "${INTER_INI}.${idx}" observation/start_time_utc "$START_TIME_UTC"
+    oskar_sim_interferometer --set "${INTER_INI}.${idx}" observation/length $OBS_LENGTH
+    oskar_sim_interferometer --set "${INTER_INI}.${idx}" observation/num_time_steps $NUM_TIME_STEPS
+
+    oskar_sim_interferometer --set "${INTER_INI}.${idx}" telescope/pol_mode $POL_MODE
+
+	if [ -n "$VISNAME" ]; then
+		oskar_sim_interferometer --set "${INTER_INI}.${idx}" interferometer/oskar_vis_filename "${VISNAME}.${idx}"
+	fi
+	if [ -n "$MS_FILENAME" ]; then
+		oskar_sim_interferometer --set "${INTER_INI}.${idx}" interferometer/ms_filename "${MS_FILENAME}.${idx}"
+	fi
+
+	if [ "${SCENARIO}" = "partition" ] ; then
+		# settings specific to an OSKAR instance
+		oskar_sim_interferometer --set "${INTER_INI}.${idx}" simulator/cuda_device_ids $idx
+		oskar_sim_interferometer --set "${INTER_INI}.${idx}" observation/start_frequency_hz ${START_FREQUENCY_HZ[$idx]}
+		oskar_sim_interferometer --set "${INTER_INI}.${idx}" observation/frequency_inc_hz ${FREQUENCY_INC_HZ[$idx]}
+		oskar_sim_interferometer --set "${INTER_INI}.${idx}" sky/oskar_sky_model/file ${SM_FILE[$idx]}
+	else
+		oskar_sim_interferometer --set "${INTER_INI}.${idx}" observation/start_frequency_hz $START_FREQUENCY_HZ
+		oskar_sim_interferometer --set "${INTER_INI}.${idx}" observation/frequency_inc_hz $FREQUENCY_INC_HZ
+		oskar_sim_interferometer --set "${INTER_INI}.${idx}" sky/oskar_sky_model/file $SM_FILE
+	fi
+	
+	if [ "${GENERATE_FITS}" = "true" ] ; then
+	    # FITS image settings
+	    oskar_imager --set "${IMAGER_INI}.${idx}" image/double_precision $DOUBLE_PRECISION
+	    oskar_imager --set "${IMAGER_INI}.${idx}" image/use_gpus $USE_GPUS
+	    oskar_imager --set "${IMAGER_INI}.${idx}" image/fov_deg $FOV_DEG
+	    oskar_imager --set "${IMAGER_INI}.${idx}" image/size $IMG_SIZE
+	    oskar_imager --set "${IMAGER_INI}.${idx}" image/channel_snapshots $CHANNEL_SNAPSHOTS
+
+		oskar_imager --set "${IMAGER_INI}.${idx}" image/input_vis_data "${VISNAME}.${idx}"
+		oskar_imager --set "${IMAGER_INI}.${idx}" image/root_path "$FITSROOT.${idx}"
+
+		# run simulator followed by imager
+		(oskar_sim_interferometer "${INTER_INI}.${idx}" && oskar_imager "${IMAGER_INI}.${idx}") &
+	else
+		# run simulator (and no imager)
+		oskar_sim_interferometer "${INTER_INI}.${idx}" &
+	fi
+		  
+done
+
+# sync 
+wait
+
+# clean up run specific settings files; runtime settings are captured in the OSKAR log
+rm ${INTER_INI}.?
+if [ "${GENERATE_FITS}" = "true" ] ; then
+	rm ${IMAGER_INI}.?
 fi
-
