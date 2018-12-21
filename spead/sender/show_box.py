@@ -67,8 +67,11 @@ for n1 in range(1,len(sall)): # recalculate SI.
     #   As there is a bug in previous calc which I can not both searching for :)
     #   si=-np.log(a/b)/np.log(fq[-1]/(df+fq[-1]))
     sall[n1]=-np.log(ball[n1]/ball[n1-1])/np.log(fq[n1-1]/fq[n1])
+    for n2 in range(N2):
+        sall[n1][n2][np.where(np.isnan(sall[n1][n2])==True)]=0
 
-sall[np.where(sall==nan)]=0
+#sall[np.where(np.isnan(sall)==True)]=0
+#ball[np.where(np.isnan(ball)==True)]=0
 
 crval=[201,-44];crdel=[6.0/N2,6.0/N3] # reference values in deg
 corn_markers=[]
