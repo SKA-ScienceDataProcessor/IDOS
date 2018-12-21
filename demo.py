@@ -7,7 +7,7 @@ for n in range(1,len(sys.argv)):
 
 start_f=float(def_par[0]) ## Start overide is MHz
 end_f=float(def_par[1]) ## Start overide is MHz
-delta_f=float(def_par[2])   ## Number of instances Delta Freq in MHz
+delta_f=int(def_par[2])   ## Number of instances to give Delta Freq in MHz
 glob_list=def_par[3] ## model file list
 
 model_list=glob.glob(glob_list)
