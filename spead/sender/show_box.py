@@ -94,7 +94,7 @@ if (show_plots==False):
     l=[]
     for n2 in range(n[1]):
         for n3 in range(n[2]):
-            if (ball[n1][n2][n3]>std_dev):
+            if (np.abs(ball[n1][n2][n3])>std_dev):
                 l.append('%10.8f %10.8f %10.8e 0.0 0.0 0.0 %e %6.3f 0.0 %6.4f %6.4f 0.0\n'%(crval[0]+(n2-N2/2)*crdel[0],crval[1]+(n3-N3/2)*crdel[1],ball[n1][n2][n3]/1e3,fq[n1]*1e6,sall[n1][n2][n3],crdel[0]/3600,crdel[1]/3600))
             #if (n1<len(a)): ## Now a is added to ball
             #    l.append('%10.8f %10.8f %10.8e 0.0 0.0 0.0 %e %6.3f 0.0 %6.4f %6.4f 0.0\n'%(crval[0]+(n2-N2/2)*crdel[0],crval[1]+(n3-N3/2)*crdel[1],a[n1][n2][n3],1e9,0,crdel[0]/3600,crdel[1]/3600))
